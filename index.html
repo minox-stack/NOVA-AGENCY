@@ -1,441 +1,485 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Mohamed Amine Hebilez — NOVA Agency</title>
+  <meta name="description" content="NOVA Agency by Mohamed Amine Hebilez — website development, video editing, social media advertising and UX/UI design. Creator of the FOWZ platform. Based in Algeria.">
+  <meta name="theme-color" content="#080509">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mohamed Amine Hebilez — NOVA Agency">
+  <meta property="og:description" content="Website development, video editing, social media ads and UX/UI design that help brands grow.">
+  <meta property="og:url" content="https://novadz.space/">
+  <meta property="og:image" content="https://novadz.space/assets/amine.webp?v=3">
+  <link rel="alternate" hreflang="en" href="https://novadz.space/">
+  <link rel="alternate" hreflang="ar" href="https://novadz.space/ar.html">
+  <link rel="alternate" hreflang="x-default" href="https://novadz.space/">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Mr+Dafoe&display=swap" rel="stylesheet">
+  <!-- only the Arabic letters used on this page ("عربي" switch + "فوز") -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&text=%D8%B9%D8%B1%D8%A8%D9%8A%D9%81%D9%88%D8%B2&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/amine.webp?v=3">
+  <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
 
-  <head>
+  <!-- Icon sprite + liquid-glass refraction filter -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="lg-refract" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.009 0.014" numOctaves="2" seed="11" result="noise"/>
+      <feGaussianBlur in="noise" stdDeviation="1.6" result="soft"/>
+      <feDisplacementMap in="SourceGraphic" in2="soft" scale="30" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+    <symbol id="i-arrow-ur" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></symbol>
+    <symbol id="i-megaphone" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24"><path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z"/><path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18M2.3 2.3l7.286 7.286"/><circle cx="11" cy="11" r="2"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.170 4.16a2 2 0 0 1-1.66 0L2 17.65M22 12.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+    <symbol id="i-file-code" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M10 12.5 8 15l2 2.5M14 12.5l2 2.5-2 2.5"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+    <symbol id="i-mobile" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></symbol>
+    <symbol id="i-support" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="m4.93 4.93 4.24 4.24M14.83 9.17l4.24-4.24M14.83 14.83l4.24 4.24M9.17 14.83l-4.24 4.24"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></symbol>
+    <symbol id="i-clapper" viewBox="0 0 24 24"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"/><path d="m6.2 5.3 3.1 3.9M12.4 3.4l3.1 4"/><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+    <symbol id="laurel" viewBox="0 0 60 120">
+      <path d="M44 112C18 92 10 52 26 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      <g fill="currentColor">
+        <ellipse cx="27" cy="99" rx="3.8" ry="9.5" transform="rotate(-60 27 99)"/>
+        <ellipse cx="39" cy="95" rx="3.4" ry="8.5" transform="rotate(18 39 95)"/>
+        <ellipse cx="17" cy="85" rx="3.8" ry="9.5" transform="rotate(-46 17 85)"/>
+        <ellipse cx="31" cy="80" rx="3.4" ry="8.5" transform="rotate(26 31 80)"/>
+        <ellipse cx="11" cy="69" rx="3.8" ry="9.5" transform="rotate(-30 11 69)"/>
+        <ellipse cx="26" cy="64" rx="3.4" ry="8.5" transform="rotate(30 26 64)"/>
+        <ellipse cx="9" cy="52" rx="3.8" ry="9.5" transform="rotate(-16 9 52)"/>
+        <ellipse cx="24" cy="46" rx="3.4" ry="8.5" transform="rotate(32 24 46)"/>
+        <ellipse cx="12" cy="34" rx="3.6" ry="9" transform="rotate(-4 12 34)"/>
+        <ellipse cx="27" cy="28" rx="3.2" ry="8" transform="rotate(34 27 28)"/>
+        <ellipse cx="22" cy="13" rx="3.4" ry="8.5" transform="rotate(14 22 13)"/>
+      </g>
+    </symbol>
+  </svg>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,300,400,500,700,900" rel="stylesheet">
-    <link rel="icon" type="image/jpg" href="C:\Users\MINOOOOX\Desktop\portfolio\images\photo_2026-03-13_16-14-05.jpg">
-    <title>NOVA AGENCY</title>
-<!--
-Elegance Template
-https://templatemo.com/tm-528-elegance
--->
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <!-- Intro loader -->
+  <div class="preloader" aria-hidden="true">
+    <div class="pl-inner">
+      <img decoding="async" class="pl-mark" src="assets/nova-mark.webp" alt="" width="300" height="283">
+      <img decoding="async" class="pl-word" src="assets/nova-wordmark.webp" alt="" width="440" height="48">
+      <div class="pl-bar"><i></i></div>
+      <span class="pl-count">0</span>
+    </div>
+  </div>
 
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+  <!-- Animated background -->
+  <div class="bg-fx" aria-hidden="true">
+    <div class="aurora"><i></i><i></i><i></i><i></i></div>
+    <canvas class="bg-net"></canvas>
+    <div class="bg-vignette"></div>
+    <div class="grain"></div>
+  </div>
+  <canvas class="fx-layer" aria-hidden="true"></canvas>
+  <div class="progress" aria-hidden="true"><span></span></div>
+  <div class="cursor" aria-hidden="true"><span class="cursor-label"></span></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
 
-    <link rel="stylesheet" type="text/css" href="css/fullpage.min.css">
+  <!-- ============ TOP BAR ============ -->
+  <header class="nav lg">
+    <a href="#home" class="logo" aria-label="NOVA Agency — home"><img decoding="async" class="logo-mark" src="assets/nova-mark.webp" alt="" width="300" height="283"><img decoding="async" class="logo-word" src="assets/nova-wordmark.webp" alt="" width="440" height="48"></a>
+    <a class="lang lg" href="ar.html" hreflang="ar" lang="ar" title="النسخة العربية">عربي</a>
+    <a href="#contact" class="btn-ghost nav-cta">Let's talk <svg class="ico"><use href="#i-arrow"/></svg></a>
+  </header>
 
-    <link rel="stylesheet" type="text/css" href="css/owl.carousel.css">
+  <main id="main">
 
-    <link rel="stylesheet" href="css/animate.css">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="home">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <span class="bubble hide-sm" style="--s0:180px; inset-inline-start:-80px; bottom:3%; --delay:-2s" data-speed="-.12" aria-hidden="true"></span>
+      <span class="bubble hide-sm" style="--s0:110px; inset-inline-end:-40px; top:14%; --delay:-5s" data-speed=".1" aria-hidden="true"></span>
+      <span class="bubble hide-sm" style="--s0:46px; inset-inline-end:8%; top:74%; --delay:-1s" data-speed="-.2" aria-hidden="true"></span>
 
-    <link rel="stylesheet" href="css/templatemo-style.css">
+      <div class="hero-stage">
+        <div class="hero-word" aria-hidden="true"><span style="--i:0">P</span><span style="--i:1">O</span><span style="--i:2">R</span><span style="--i:3">T</span><span style="--i:4">F</span><span style="--i:5">O</span><span style="--i:6">L</span><span style="--i:7">I</span><span style="--i:8">O</span></div>
+        <svg class="hero-ring" viewBox="0 0 1000 380" aria-hidden="true" focusable="false">
+          <defs><linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#ff4d7d" stop-opacity="0"/>
+            <stop offset=".22" stop-color="#ff4d7d"/>
+            <stop offset=".6" stop-color="#fa1d4c"/>
+            <stop offset=".85" stop-color="#ef5599"/>
+            <stop offset="1" stop-color="#ef5599" stop-opacity="0"/>
+          </linearGradient></defs>
+          <ellipse cx="500" cy="190" rx="485" ry="150" fill="none" stroke="url(#ring-grad)" stroke-width="3"/>
+        </svg>
+        <div class="hero-blob lg refract" aria-hidden="true"></div>
+        <img decoding="async" class="hero-photo" src="assets/amine.webp?v=3" alt="Portrait of Mohamed Amine Hebilez" width="1040" height="1402" fetchpriority="high">
+      </div>
 
-    <link rel="stylesheet" href="css/responsive.css">
+      <div class="hero-intro">
+        <div class="hero-id">
+          <p class="hello reveal" style="--d:.3s">Hello, I'm</p>
+          <h1 class="hero-name reveal" style="--d:.35s">Mohamed<br>Amine<span class="dot">.</span></h1>
+        </div>
+        <div class="hero-more">
+          <p class="hero-role lg reveal" style="--d:.6s"><img decoding="async" src="assets/nova-mark.webp" alt="" width="300" height="283"> Founder of NOVA Agency</p>
+          <p class="hero-typed reveal" style="--d:.7s" aria-hidden="true"><span class="tw-label">I do</span><span class="tw" data-words='["Website Development","Video Editing","UX/UI Design","Social Media Ads"]'></span><i class="caret"></i></p>
+          <p class="hero-lead reveal" style="--d:.8s">I build websites, edit videos, run social media ads and design clean UX/UI — helping brands grow in the digital world.</p>
+          <div class="hero-actions reveal" style="--d:.9s">
+            <a class="btn auto-shine" href="#work">See my work <svg class="ico"><use href="#i-arrow"/></svg></a>
+            <button class="btn btn-outline lg" type="button" data-wa>WhatsApp <svg class="ico wa-ico"><use href="#i-whatsapp"/></svg></button>
+          </div>
+          <p class="hero-loc reveal" style="--d:1s"><svg class="ico"><use href="#i-pin"/></svg> Algeria</p>
+        </div>
+      </div>
 
-    </head>
-    
-    <body>
-    
-    <div id="video">
-        <div class="preloader">
-            <div class="preloader-bounce">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+      <ul class="hero-stats lg reveal" style="--d:1.1s" aria-label="Highlights">
+        <li><b data-count="5">5</b><span>Awards<br>won</span></li>
+        <li><b data-count="12">12</b><span>Certificates<br>earned</span></li>
+        <li><b data-count="2">2</b><span>Years of<br>work</span></li>
+        <li><b data-count="5" data-plus>5</b><span>Years of video<br>editing</span></li>
+      </ul>
+
+      <!-- phone: the band sits right under the photo, like on desktop -->
+      <div class="marquee-wrap marquee-m" aria-hidden="true">
+        <div class="marquee">
+          <div class="marquee-track">
+            <div class="marquee-group"><span>Website Development</span><i>✦</i><span>Video Editing</span><i>✦</i><span>Social Media Advertising</span><i>✦</i><span>UX/UI Design</span><i>✦</i><span>FOWZ Platform</span><i>✦</i><span>Responsive Web</span><i>✦</i><span>Campaign Management</span><i>✦</i></div>
+            <div class="marquee-group"><span>Website Development</span><i>✦</i><span>Video Editing</span><i>✦</i><span>Social Media Advertising</span><i>✦</i><span>UX/UI Design</span><i>✦</i><span>FOWZ Platform</span><i>✦</i><span>Responsive Web</span><i>✦</i><span>Campaign Management</span><i>✦</i></div>
+          </div>
+        </div>
+      </div>
+
+      <a class="scroll-cue" href="#work" aria-label="Scroll to work"><span>Scroll</span><i></i></a>
+    </section>
+
+    <!-- ============ MARQUEE ============ -->
+    <div class="marquee-wrap marquee-d" aria-hidden="true">
+      <div class="marquee">
+        <div class="marquee-track">
+          <div class="marquee-group"><span>Website Development</span><i>✦</i><span>Video Editing</span><i>✦</i><span>Social Media Advertising</span><i>✦</i><span>UX/UI Design</span><i>✦</i><span>FOWZ Platform</span><i>✦</i><span>Responsive Web</span><i>✦</i><span>Campaign Management</span><i>✦</i></div>
+          <div class="marquee-group"><span>Website Development</span><i>✦</i><span>Video Editing</span><i>✦</i><span>Social Media Advertising</span><i>✦</i><span>UX/UI Design</span><i>✦</i><span>FOWZ Platform</span><i>✦</i><span>Responsive Web</span><i>✦</i><span>Campaign Management</span><i>✦</i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ MY WORK & PROJECTS ============ -->
+    <section class="section work" id="work">
+      <span class="bubble hide-sm" style="--s0:70px; inset-inline-end:4%; top:6%; --delay:-3s" data-speed=".18" aria-hidden="true"></span>
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="reveal">
+            <p class="eyebrow"><b>01</b> / My work &amp; projects</p>
+            <h2 class="display">My work &amp; <em>projects.</em></h2>
+          </div>
+          <div class="filters reveal" style="--d:.1s" role="group" aria-label="Filter projects">
+            <button class="chip lg is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="chip lg" type="button" data-filter="mine" aria-pressed="false">My projects</button>
+            <button class="chip lg" type="button" data-filter="web" aria-pressed="false">Web Development</button>
+            <button class="chip lg" type="button" data-filter="ads" aria-pressed="false">Social Ads</button>
+            <button class="chip lg" type="button" data-filter="events" aria-pressed="false">Events</button>
+          </div>
         </div>
 
-        <header id="header">
-            <div class="container-fluid">
-                <div class="navbar">
-                    <a href="#" id="logo" title="Elegance by TemplateMo">
-                        NOVA AGENCY 
-                    </a>
-                    <div class="navigation-row">
-                        <nav id="navigation">
-                            <button type="button" class="navbar-toggle"> <i class="fa fa-bars"></i> </button>
-                            <div class="nav-box navbar-collapse">
-                                <ul class="navigation-menu nav navbar-nav navbars" id="nav">
-                                    <li data-menuanchor="slide01" class="active"><a href="#slide01">Home</a></li>
-                                    <li data-menuanchor="slide02"><a href="#slide02">About Me</a></li>
-                                    <li data-menuanchor="slide03"><a href="#slide03">Services</a></li>
-                                    <li data-menuanchor="slide04"><a href="#slide04">My Skills</a></li>
-                                    <li data-menuanchor="slide05"><a href="#slide05">My Work</a></li>
-                                    <li data-menuanchor="slide06"><a href="#slide06">Testimonials</a></li>
-                                    <li data-menuanchor="slide07"><a href="#slide07">Contact Me</a></li>
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
+        <div class="work-grid">
+          <!-- Featured: my own platform -->
+          <article class="project feature lg reveal" data-cat="mine" data-fx="scale">
+            <div class="feature-body">
+              <div class="feature-top"><span class="num">01</span><span class="badge"><i></i>Main project</span></div>
+              <h3 class="feature-name"><span class="feature-lat">FOWZ</span><span class="feature-ar" lang="ar">فوز</span></h3>
+              <p class="feature-role">My own platform</p>
+              <p class="feature-desc">FOWZ | فوز is my own platform — and my main project.</p>
+              <a class="btn" href="https://fowz.alwaysdata.net/landing" target="_blank" rel="noopener">Visit FOWZ <svg class="ico"><use href="#i-arrow-ur"/></svg></a>
             </div>
-        </header>
+            <a class="feature-media" href="https://fowz.alwaysdata.net/landing" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-cursor="Visit">
+              <div class="browser" data-tilt="10">
+                <div class="browser-bar"><i></i><i></i><i></i><span>fowz.alwaysdata.net</span></div>
+                <img decoding="async" src="assets/fowz.webp" alt="" width="1200" height="750" loading="lazy">
+              </div>
+            </a>
+          </article>
 
-        <video autoplay muted loop id="myVideo">
-          <source src="images/video-bg.mp4" type="video/mp4">
-        </video>
-
-        <div id="fullpage" class="fullpage-default">
-
-            <div class="section animated-row" data-section="slide01">
-                <div class="section-inner">
-                    <div class="welcome-box">
-                        <span class="welcome-first animate" data-animate="fadeInUp">Hello, welcome to</span>
-                        <h1 class="welcome-title animate" data-animate="fadeInUp">NOVA AGENCY</h1>
-                        <p class="animate" data-animate="fadeInUp">NOVA Agency is a digital agency specialized in professional website development, social media advertising management, and modern UX/UI design. Our goal is to help businesses and brands grow in the digital world and achieve real results through smart designs and effective marketing strategies. </p>
-                        <div class="scroll-down next-section animate data-animate="fadeInUp""><img src="images/mouse-scroll.png" alt=""><span>Scroll Down</span></div>
-                    </div>
-                </div>
+          <article class="project reveal" data-cat="events" data-fx="clip">
+            <div class="project-media" style="--brand:#6407d8" data-tilt data-cursor="Open">
+              <img decoding="async" src="assets/yassir.webp" alt="Yassir logo" width="860" height="363" loading="lazy">
+              <span class="tag">Events</span>
+              <span class="open" aria-hidden="true"><svg class="ico"><use href="#i-arrow-ur"/></svg></span>
             </div>
-
-            <div class="section animated-row" data-section="slide02">
-                <div class="section-inner">
-                    <div class="about-section">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8 wide-col-laptop">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="about-contentbox">
-                                            <div class="animate" data-animate="fadeInUp">
-                                                <span>About Me</span>
-                                                <h2>Who am i?</h2>
-                                                <p>My name is <strong>Mohamed Amine Hebilez</strong> founder of <strong>NOVA Agency</strong> I specialize in website development, social media advertising, and UX/UI design to help brands grow in the digital world.</p>
-                                            </div>
-                                            <div class="facts-list owl-carousel">
-                                                <div class="item animate" data-animate="fadeInUp">
-                                                    <div class="counter-box">
-                                                        <i class="fa fa-trophy counter-icon" aria-hidden="true"></i><span class="count-number">5</span> Awards Won
-                                                    </div>
-                                                </div>
-                                                <div class="item animate" data-animate="fadeInUp">
-                                                    <div class="counter-box">
-                                                        <i class="fa fa-graduation-cap counter-icon" aria-hidden="true"></i><span class="count-number">3</span> Degrees
-                                                    </div>
-                                                </div>
-                                                <div class="item animate" data-animate="fadeInUp">
-                                                    <div class="counter-box">
-                                                        <i class="fa fa-desktop counter-icon" aria-hidden="true"></i><span class="count-number">2</span> Working Years
-                                                    </div>
-                                                </div>
-                                                <div class="item animate" data-animate="fadeInUp">
-                                                    <div class="counter-box">
-                                                        <i class="fa fa-support counter-icon" aria-hidden="true"></i><span class="count-number">3</span> Team Members
-                                                    </div>
-                                                </div>
-                                                <div class="item animate" data-animate="fadeInUp">
-                                                    <div class="counter-box">
-                                                        <i class="fa fa-certificate counter-icon" aria-hidden="true"></i><span class="count-number">12</span> Certificates
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <figure class="about-img animate" data-animate="fadeInUp"><img src="images/profile-girl.jpg" class="rounded" alt=""></figure>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="project-meta">
+              <span class="num">02</span>
+              <div>
+                <h3><button class="project-open" type="button" data-project="yassir">Yassir</button></h3>
+                <p>Event Supervisor</p>
+              </div>
             </div>
+          </article>
 
-            <div class="section animated-row" data-section="slide03">
-                <div class="section-inner">
-                    <div class="row justify-content-center">
-                        <div class="col-md-8 wide-col-laptop">
-                            <div class="title-block animate" data-animate="fadeInUp">
-                                <span>Services</span>
-                                <h2>What I Do?</h2>
-                            </div>
-                            <div class="services-section">
-                                <div class="services-list owl-carousel">
-                                    <div class="item animate" data-animate="fadeInUp">
-                                        <div class="service-box">
-                                            <span class="service-icon"><i class="fa fa-bookmark" aria-hidden="true"></i></span>
-                                            <h3>Bootstrap Themes</h3>
-                                            <p> </p>
-                                        </div>
-                                    </div>
-                                    <div class="item animate" data-animate="fadeInUp">
-                                        <div class="service-box">
-                                            <span class="service-icon"><i class="fa fa-cloud" aria-hidden="true"></i></span>
-                                            <h3>HTML5 Coding</h3>
-                                            <p> </p>
-                                        </div>
-                                    </div>
-                                    <div class="item animate" data-animate="fadeInUp">
-                                        <div class="service-box">
-                                            <span class="service-icon"><i class="fa fa-desktop" aria-hidden="true"></i></span>
-                                            <h3>Fully Responsive</h3>
-                                            <p> </p>
-                                        </div>
-                                    </div>
-                                    <div class="item animate" data-animate="fadeInUp">
-                                        <div class="service-box">
-                                            <span class="service-icon"><i class="fa fa-mobile" aria-hidden="true"></i></span>
-                                            <h3>Mobile Ready</h3>
-                                            <p> </p>
-                                        </div>
-                                    </div>
-                                    <div class="item animate" data-animate="fadeInUp">
-                                        <div class="service-box">
-                                            <span class="service-icon"><i class="fa fa-comments" aria-hidden="true"></i></span>
-                                            <h3>Fast Support</h3>
-                                            <p> </p>
-                                        </div>
-                                    </div>
-                                    <div class="item animate" data-animate="fadeInUp">
-                                        <div class="service-box">
-                                            <span class="service-icon"><i class="fa fa-database" aria-hidden="true"></i></span>
-                                            <h3>24-hour Up Time</h3>
-                                            <p> </p>
-                                        </div>
-                                    </div>
-                                    <div class="item animate" data-animate="fadeInUp">
-                                        <div class="service-box">
-                                            <span class="service-icon"><i class="fa fa-bell" aria-hidden="true"></i></span>
-                                            <h3>Instant Upgrades</h3>
-                                            <p> </p>
-                                        </div>
-                                    </div>
-                                    <div class="item animate" data-animate="fadeInUp">
-                                        <div class="service-box">
-                                            <span class="service-icon"><i class="fa fa-camera" aria-hidden="true"></i></span>
-                                            <h3>Always Monitoring</h3>
-                                            <p> </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <article class="project reveal" style="--d:.1s" data-cat="web" data-fx="clip">
+            <div class="project-media" style="--brand:#ffffff" data-tilt data-cursor="Open">
+              <img decoding="async" src="assets/abayti.webp" alt="Abayti logo" width="333" height="160" loading="lazy">
+              <span class="tag">Web Development</span>
+              <span class="open" aria-hidden="true"><svg class="ico"><use href="#i-arrow-ur"/></svg></span>
             </div>
+            <div class="project-meta">
+              <span class="num">03</span>
+              <div>
+                <h3><button class="project-open" type="button" data-project="abayaty">abayaty.tn</button></h3>
+                <p>E-commerce website · UX/UI</p>
+              </div>
+            </div>
+          </article>
 
-            <div class="section animated-row" data-section="slide04">
-                <div class="section-inner">
-                    <div class="row justify-content-center">
-                        <div class="col-md-7 wide-col-laptop">
-                            <div class="title-block animate" data-animate="fadeInUp">
-                                <span>My Skills</span>
-                                <h2>What i’m good?</h2>
-                            </div>
-                            <div class="skills-row animate" data-animate="fadeInDown">
-                                <div class="row">
-                                    <div class="col-md-8 offset-md-2">   
-                                        <div class="skill-item">
-                                            <h6>HTML CSS</h6>
-                                            <div class="skill-bar">
-                                                <span>70%</span>
-                                                <div class="filled-bar"></div>
-                                            </div>          
-                                        </div>
-                                        <div class="skill-item">
-                                            <h6>PSD Design</h6>
-                                            <div class="skill-bar">
-                                                <span>90%</span>
-                                                <div class="filled-bar-2"></div>
-                                            </div>          
-                                        </div>
-                                        <div class="skill-item">
-                                            <h6>Social Media</h6>
-                                            <div class="skill-bar">
-                                                <span>70%</span>
-                                                <div class="filled-bar"></div>
-                                            </div>          
-                                        </div>
-                                        <div class="skill-item last-skill">
-                                            <h6>Leadership</h6>
-                                            <div class="skill-bar">
-                                                <span>90%</span>
-                                                <div class="filled-bar-2"></div>
-                                            </div>          
-                                        </div>                   
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <article class="project reveal" style="--d:.2s" data-cat="ads" data-fx="clip">
+            <div class="project-media" style="--brand:#f8f8f8" data-tilt data-cursor="Open">
+              <img decoding="async" src="assets/myhome.webp" alt="My Home logo" width="374" height="242" loading="lazy">
+              <span class="tag">Social Ads</span>
+              <span class="open" aria-hidden="true"><svg class="ico"><use href="#i-arrow-ur"/></svg></span>
             </div>
+            <div class="project-meta">
+              <span class="num">04</span>
+              <div>
+                <h3><button class="project-open" type="button" data-project="myhome">My Home</button></h3>
+                <p>Social media advertising &amp; marketing</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-            <div class="section animated-row" data-section="slide06">
-                <div class="section-inner">
-                    <div class="row justify-content-center">
-                        <div class="col-md-8 wide-col-laptop">
-                            <div class="title-block animate" data-animate="fadeInUp">
-                                 <span>My Work</span>
-                                <h2>what i’ve done?</h2>
-                            </div>
-                            <div class="gallery-section">
-                                <div class="gallery-list owl-carousel">
-                                    <div class="item animate" data-animate="fadeInUp">
-                                        <div class="portfolio-item">
-                                            <div class="thumb">
-                                                <img src="images/item-1.png" alt="">
-                                            </div>
-                                            <div class="thumb-inner animate" data-animate="fadeInUp">
-                                                <h4>Yassir</h4>
-                                                <p>I worked as an event supervisor at Yassir, where I helped organize and manage event activities, coordinate with the team, and ensure everything ran smoothly.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item animate" data-animate="fadeInUp">
-                                        <div class="portfolio-item">
-                                            <div class="thumb">
-                                                <img src="images/item-2.png" alt="">
-                                            </div>
-                                            <div class="thumb-inner animate" data-animate="fadeInUp">
-                                                <h4>abayaty.tn</h4>
-                                                <p>Built a modern website for an e-commerce startup with a focus on UX/UI and performance</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item animate" data-animate="fadeInUp">
-                                        <div class="portfolio-item">
-                                            <div class="thumb">
-                                                <img src="images/item-3.png" alt="">
-                                            </div>
-                                            <div class="thumb-inner animate" data-animate="fadeInUp">
-                                                <h4>MY HOME</h4>
-                                                <p>Managed and optimized sponsored advertising campaigns for a home supplies company, helping increase reach and online sales.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section animated-row" data-section="slide05">
-                <div class="section-inner">
-                    <div class="row justify-content-center">
-                        <div class="col-md-8 wide-col-laptop">
-                            <div class="title-block animate" data-animate="fadeInUp">
-                                <span>TESTIMONIALS</span>
-                                <h2>what THEY SAY?</h2>
-                            </div>
-                            <div class="col-md-8 offset-md-2">
-                                <div class="testimonials-section">
-                                    <div class="testimonials-slider owl-carousel">
-                                        <div class="item animate" data-animate="fadeInUp">
-                                            <div class="testimonial-item">
-                                                <div class="client-row">
-                                                    <img src="images/profile-01.jpg" class="rounded-circle" alt="profile 1">
-                                                </div>
-                                                <div class="testimonial-content">
-                                                    <h4>MALEK</h4>
-                                                    <p>""Working with Mohamed Amine was a great experience. He built us a professional website that perfectly represents our brand.""</p>
-                                                    <span></span>
-                                                </div>                                           
-                                            </div>
-                                        </div>
-                                        <div class="item animate" data-animate="fadeInUp">
-                                            <div class="testimonial-item">
-                                                <div class="client-row">
-                                                    <img src="images/profile-01.jpg" class="rounded-circle" alt="profile 2">
-                                                </div>
-                                                <div class="testimonial-content">
-                                                    <h4>NAIM</h4>
-                                                    <p>""The social media advertising campaign delivered great results and helped us reach more customers in a short time.""</p>
-                                                    <span></span>
-                                                </div>                                           
-                                            </div>
-                                        </div>
-                                        <div class="item animate" data-animate="fadeInUp">
-                                            <div class="testimonial-item">
-                                                <div class="client-row">
-                                                    <img src="images/profile-01.jpg" class="rounded-circle" alt="profile 3">
-                                                </div>
-                                                <div class="testimonial-content">
-                                                    <h4>MANAR</h4>
-                                                    <p>"Very professional in UX/UI design. The interface was clean, modern, and improved our user experience"</p>
-                                                    <span></span>
-                                                </div>                                           
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section animated-row" data-section="slide07">
-                <div class="section-inner">
-                    <div class="row justify-content-center">
-                        <div class="col-md-7 wide-col-laptop">
-                            <div class="title-block animate" data-animate="fadeInUp">
-                                <span>Contact</span>
-                                <h2>Get In Touch!</h2>
-                            </div>
-                            <div class="contact-section">
-                                <div class="row">
-                                    <div class="col-md-6 animate" data-animate="fadeInUp">
-                                        <div class="contact-box">
-                                            <div class="contact-row">
-                                                <i class="fa fa-map-marker"></i> BISKRA
-                                            </div>
-                                            <div class="contact-row">
-                                                <i class="fa fa-phone"></i> 0796263591
-                                            </div>
-                                            <div class="contact-row">
-                                                <i class="fa fa-envelope"></i> hbamine9@gmail.com
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 animate" data-animate="fadeInUp">
-                                        <form id="ajax-contact" method="post" action="https://formspree.io/f/mreylboe">
-                                            <div class="input-field">
-                                                <input type="text" class="form-control" name="name" id="name" required placeholder="Name">
-                                            </div>
-                                            <div class="input-field">
-                                                <input type="email" class="form-control" name="email" id="email" required placeholder="Email">
-                                            </div>
-                                            <div class="input-field">
-                                                <textarea class="form-control" name="message" id="message" required placeholder="Message"></textarea>
-                                            </div>
-                                            <button class="btn" type="submit">Submit</button>
-                                        </form>
-                                        <div id="form-messages" class="mt-3"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- ============ ACHIEVEMENTS ============ -->
+    <section class="section awards" id="achievements">
+      <span class="bubble" style="--s0:150px; inset-inline-end:-50px; top:10%; --delay:-3s" data-speed=".15" aria-hidden="true"></span>
+      <div class="wrap awards-grid">
+        <div class="awards-intro reveal">
+          <p class="eyebrow"><b>✦</b> Achievements</p>
+          <h2 class="display">The work.<br><em>The recognition.</em></h2>
+          <div class="laurel" data-speed="-.06">
+            <svg class="laurel-branch" viewBox="0 0 60 120" aria-hidden="true"><use href="#laurel"/></svg>
+            <strong data-count="5">5</strong>
+            <svg class="laurel-branch flip" viewBox="0 0 60 120" aria-hidden="true"><use href="#laurel"/></svg>
+          </div>
+          <p class="laurel-cap">Awards won</p>
+          <p class="lead awards-lead">Results that came from real projects, real clients and a lot of learning along the way.</p>
         </div>
 
-        <div id="social-icons">
-            <div class="text-right">
-                <ul class="social-icons">
-                    <li><a href="https://www.instagram.com/mino_exe7/" title="Facebook"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="https://www.instagram.com/mino_exe7/" title="Twitter"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="https://www.instagram.com/mino_exe7/" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>
-                    <li><a href="https://www.instagram.com/mino_exe7/" title="Instagram"><i class="fa fa-behance"></i></a></li>
-                </ul>
-            </div>
+        <ol class="awards-list">
+          <li class="reveal" data-fx="left"><div><h3>Certificates</h3><p>Courses &amp; trainings completed</p></div><b data-count="12">12</b></li>
+          <li class="reveal" data-fx="left" style="--d:.08s"><div><h3>Degrees</h3><p>Academic degrees earned</p></div><b data-count="3">3</b></li>
+          <li class="reveal" data-fx="left" style="--d:.16s"><div><h3>Working years</h3><p>Building for brands &amp; businesses</p></div><b data-count="2">2</b></li>
+          <li class="reveal" data-fx="left" style="--d:.24s"><div><h3>Team members</h3><p>The crew behind NOVA Agency</p></div><b data-count="3">3</b></li>
+          <li class="reveal" data-fx="left" style="--d:.32s"><div><h3>Video editing</h3><p>Years of hands-on editing experience</p></div><b data-count="5" data-plus>5</b></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ SERVICES ============ -->
+    <section class="section services" id="services">
+      <span class="bubble hide-sm" style="--s0:90px; inset-inline-start:-30px; top:40%; --delay:-6s" data-speed="-.14" aria-hidden="true"></span>
+      <div class="wrap">
+        <div class="sec-head split-head">
+          <div class="reveal">
+            <p class="eyebrow"><b>02</b> / Services</p>
+            <h2 class="display">From idea.<br><em>To growth.</em></h2>
+          </div>
+          <p class="lead reveal" style="--d:.1s">NOVA Agency helps brands and businesses grow online — through professional design, video content, modern technical solutions and advertising strategies that perform.</p>
         </div>
-    </div>  
 
-    <script src="js/jquery.js"></script>
+        <div class="pillars">
+          <article class="pillar lg reveal" data-fx="flip" data-tilt>
+            <span class="num">01</span>
+            <span class="ico-box"><svg class="ico"><use href="#i-code"/></svg></span>
+            <h3>Website Development</h3>
+            <p>Modern, fast websites and e-commerce stores built with HTML5, CSS and Bootstrap — responsive on every screen.</p>
+            <ul class="tags"><li>HTML5 &amp; CSS</li><li>Bootstrap</li><li>E-commerce</li></ul>
+          </article>
+          <article class="pillar lg reveal" data-fx="flip" style="--d:.12s" data-tilt>
+            <span class="num">02</span>
+            <span class="ico-box"><svg class="ico"><use href="#i-megaphone"/></svg></span>
+            <h3>Social Media Ads</h3>
+            <p>Sponsored campaigns planned, launched and optimized to reach new customers and grow online sales.</p>
+            <ul class="tags"><li>Campaign management</li><li>Targeting</li><li>Optimization</li></ul>
+          </article>
+          <article class="pillar lg reveal" data-fx="flip" style="--d:.24s" data-tilt>
+            <span class="num">03</span>
+            <span class="ico-box"><svg class="ico"><use href="#i-pen"/></svg></span>
+            <h3>UX/UI Design</h3>
+            <p>Clean, modern interfaces and PSD designs focused on a clear and easy experience for your users.</p>
+            <ul class="tags"><li>UX/UI</li><li>PSD design</li><li>Brand identity</li></ul>
+          </article>
+          <article class="pillar lg reveal" data-fx="flip" style="--d:.36s" data-tilt>
+            <span class="num">04</span>
+            <span class="ico-box"><svg class="ico"><use href="#i-clapper"/></svg></span>
+            <h3>Video Editing</h3>
+            <p>5+ years of editing experience — Reels, TikToks, YouTube videos and video ads, with clean cuts, color, sound and motion that keep people watching.</p>
+            <ul class="tags"><li>Reels &amp; TikTok</li><li>Video ads</li><li>Color &amp; sound</li><li>Motion &amp; subtitles</li></ul>
+          </article>
+        </div>
 
-    <script src="js/bootstrap.min.js"></script>
+        <ul class="features">
+          <li class="reveal" data-fx="scale"><svg class="ico"><use href="#i-layers"/></svg><div><h4>Bootstrap Themes</h4><p>Custom Bootstrap themes and templates.</p></div></li>
+          <li class="reveal" data-fx="scale" style="--d:.05s"><svg class="ico"><use href="#i-file-code"/></svg><div><h4>HTML5 Coding</h4><p>Clean, modern, semantic code.</p></div></li>
+          <li class="reveal" data-fx="scale" style="--d:.1s"><svg class="ico"><use href="#i-monitor"/></svg><div><h4>Fully Responsive</h4><p>Looks right on every screen size.</p></div></li>
+          <li class="reveal" data-fx="scale" style="--d:.15s"><svg class="ico"><use href="#i-mobile"/></svg><div><h4>Mobile Ready</h4><p>Optimized for phones first.</p></div></li>
+          <li class="reveal" data-fx="scale"><svg class="ico"><use href="#i-support"/></svg><div><h4>Fast Support</h4><p>Quick help whenever you need it.</p></div></li>
+          <li class="reveal" data-fx="scale" style="--d:.05s"><svg class="ico"><use href="#i-clock"/></svg><div><h4>24-hour Up Time</h4><p>Your site stays online around the clock.</p></div></li>
+          <li class="reveal" data-fx="scale" style="--d:.1s"><svg class="ico"><use href="#i-zap"/></svg><div><h4>Instant Upgrades</h4><p>Fast updates and improvements.</p></div></li>
+          <li class="reveal" data-fx="scale" style="--d:.15s"><svg class="ico"><use href="#i-activity"/></svg><div><h4>Always Monitoring</h4><p>Continuous follow-up and monitoring.</p></div></li>
+        </ul>
+      </div>
+    </section>
 
-    <script src="js/fullpage.min.js"></script>
+    <!-- ============ ABOUT ============ -->
+    <section class="section about" id="about">
+      <div class="wrap">
+        <div class="sec-head split-head">
+          <div class="reveal">
+            <p class="eyebrow"><b>03</b> / Behind NOVA</p>
+            <h2 class="display">Not just websites.<br><em>Brands that grow.</em></h2>
+          </div>
+          <p class="lead reveal" style="--d:.1s">I'm <strong>Mohamed Amine Hebilez</strong>, founder of NOVA Agency, creator of FOWZ and a video editor with more than 5 years of experience. I specialise in website development, video editing, social media advertising and UX/UI design — focused on helping brands build their digital presence and grow.</p>
+        </div>
 
-    <script src="js/scrolloverflow.js"></script>
+        <div class="about-grid">
+          <div class="about-col reveal">
+            <h3 class="col-title">My skills</h3>
+            <ul class="skills">
+              <li style="--v:70"><div class="skill-top"><span>HTML / CSS</span><b>70%</b></div><div class="bar"><i></i></div></li>
+              <li style="--v:90"><div class="skill-top"><span>PSD Design</span><b>90%</b></div><div class="bar"><i></i></div></li>
+              <li style="--v:70"><div class="skill-top"><span>Social Media</span><b>70%</b></div><div class="bar"><i></i></div></li>
+              <li style="--v:90"><div class="skill-top"><span>Leadership</span><b>90%</b></div><div class="bar"><i></i></div></li>
+            </ul>
+            <h3 class="col-title">Expertise</h3>
+            <ul class="tags">
+              <li>Website Development</li><li>Video Editing</li><li>Reels &amp; Short Videos</li><li>HTML5 &amp; CSS</li><li>Responsive Design</li><li>UX/UI Design</li><li>PSD Design</li><li>Social Media Ads</li><li>Campaign Management</li><li>Leadership</li>
+            </ul>
+          </div>
 
-    <script src="js/owl.carousel.min.js"></script>
+          <div class="about-col reveal" style="--d:.1s">
+            <h3 class="col-title">From idea to launch</h3>
+            <ol class="process">
+              <li><span>01</span><div><h4>Discover</h4><p>Understand your brand, your goals and your audience.</p></div></li>
+              <li><span>02</span><div><h4>Design</h4><p>Shape a clean UX/UI that feels right for your customers.</p></div></li>
+              <li><span>03</span><div><h4>Build</h4><p>Develop a fast, responsive, mobile-ready website.</p></div></li>
+              <li><span>04</span><div><h4>Grow</h4><p>Launch ad campaigns, monitor, upgrade and keep improving.</p></div></li>
+            </ol>
+          </div>
 
-    <script src="js/jquery.inview.min.js"></script>
+          <aside class="quote-card reveal" data-fx="flip" style="--d:.2s" data-tilt>
+            <span class="q" aria-hidden="true">“</span>
+            <p>From the first idea to a brand that grows online.</p>
+            <span class="sign">Amine</span>
+            <small>Founder, NOVA Agency</small>
+          </aside>
+        </div>
+      </div>
+    </section>
 
-    <script src="js/form.js"></script>
+    <!-- ============ TESTIMONIALS ============ -->
+    <section class="section reviews" id="reviews">
+      <span class="bubble hide-sm" style="--s0:64px; inset-inline-end:6%; top:12%; --delay:-4s" data-speed=".2" aria-hidden="true"></span>
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="reveal">
+            <p class="eyebrow"><b>04</b> / Kind words</p>
+            <h2 class="display">What clients <em>say.</em></h2>
+          </div>
+        </div>
+        <div class="review-grid">
+          <figure class="review lg reveal" data-fx="left" data-tilt="6">
+            <span class="q" aria-hidden="true">“</span>
+            <blockquote>Working with Mohamed Amine was a great experience. He built us a professional website that perfectly represents our brand.</blockquote>
+            <figcaption><span class="avatar" aria-hidden="true">M</span><div><b>Malek</b><small>Website development</small></div></figcaption>
+          </figure>
+          <figure class="review lg reveal" data-fx="scale" style="--d:.1s" data-tilt="6">
+            <span class="q" aria-hidden="true">“</span>
+            <blockquote>The social media advertising campaign delivered great results and helped us reach more customers in a short time.</blockquote>
+            <figcaption><span class="avatar" aria-hidden="true">N</span><div><b>Naim</b><small>Social media advertising</small></div></figcaption>
+          </figure>
+          <figure class="review lg reveal" data-fx="right" style="--d:.2s" data-tilt="6">
+            <span class="q" aria-hidden="true">“</span>
+            <blockquote>Very professional in UX/UI design. The interface was clean, modern, and improved our user experience.</blockquote>
+            <figcaption><span class="avatar" aria-hidden="true">M</span><div><b>Manar</b><small>UX/UI design</small></div></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
 
-    <script src="js/custom.js"></script>
+    <!-- ============ CONTACT ============ -->
+    <section class="section contact" id="contact">
+      <span class="bubble" style="--s0:200px; inset-inline-end:-80px; bottom:8%; --delay:-7s" data-speed="-.12" aria-hidden="true"></span>
+      <div class="wrap contact-grid">
+        <div>
+          <div class="reveal">
+            <p class="eyebrow"><b>05</b> / Your next project</p>
+            <h2 class="display xl">Let's work<br>together<em>.</em></h2>
+            <p class="lead">Have a project in mind? A website, an ad campaign or a new interface — let's make it grow.</p>
+          </div>
+          <ul class="contact-list">
+            <li class="reveal" data-fx="left"><a href="mailto:minooooooox@gmail.com"><span class="ic"><svg class="ico"><use href="#i-mail"/></svg></span><span><small>Email</small><span class="val">minooooooox@gmail.com</span></span><svg class="ico go"><use href="#i-arrow-ur"/></svg></a></li>
+            <li class="reveal" data-fx="left" style="--d:.06s"><button type="button" class="wa-row" data-wa><span class="ic ic-wa"><svg class="ico wa-ico"><use href="#i-whatsapp"/></svg></span><span><small>WhatsApp</small><span class="val">Chat with me on WhatsApp</span></span><svg class="ico go"><use href="#i-arrow-ur"/></svg></button></li>
+            <li class="reveal" data-fx="left" style="--d:.12s"><a href="https://novadz.space/" target="_blank" rel="noopener"><span class="ic"><svg class="ico"><use href="#i-globe"/></svg></span><span><small>Website</small><span class="val">novadz.space</span></span><svg class="ico go"><use href="#i-arrow-ur"/></svg></a></li>
+            <li class="reveal" data-fx="left" style="--d:.18s"><div><span class="ic"><svg class="ico"><use href="#i-pin"/></svg></span><span><small>Location</small><span class="val">Algeria</span></span></div></li>
+          </ul>
+        </div>
 
+        <form class="contact-form lg reveal" id="contact-form" novalidate data-fx="right" style="--d:.1s">
+          <h3 class="display">Make it <em>grow.</em></h3>
+          <p class="form-sub">Tell me about your project — by email or on WhatsApp.</p>
+          <label class="field"><span>Name</span><input name="name" type="text" autocomplete="name" required></label>
+          <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+          <label class="field"><span>Message</span><textarea name="message" rows="4" required></textarea></label>
+          <div class="form-actions"><button class="btn" type="submit" data-send="email">Send by email <svg class="ico"><use href="#i-send"/></svg></button><button class="btn btn-wa" type="submit" data-send="wa">WhatsApp <svg class="ico wa-ico"><use href="#i-whatsapp"/></svg></button></div>
+          <p class="form-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
 
-  </body>
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer-brand"><img decoding="async" src="assets/nova-logo.webp" alt="NOVA Agency logo" width="560" height="487" loading="lazy" data-speed="-.08"></div>
+    <div class="wrap footer-bar">
+      <a href="#home" class="logo" aria-label="NOVA Agency"><img decoding="async" class="logo-mark" src="assets/nova-mark.webp" alt="" width="300" height="283"><img decoding="async" class="logo-word" src="assets/nova-wordmark.webp" alt="" width="440" height="48"></a>
+      <p>© <span id="year">2026</span> NOVA Agency — Mohamed Amine Hebilez · Algeria</p>
+      <a href="#home" class="to-top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <!-- WhatsApp: opens a chat, the number is never written on the page -->
+  <button class="wa-fab" type="button" data-wa aria-label="Chat on WhatsApp"><svg class="wa-ico" aria-hidden="true"><use href="#i-whatsapp"/></svg><span class="wa-fab-label">WhatsApp</span></button>
+
+  <!-- ============ PROJECT DIALOG ============ -->
+  <dialog class="modal lg" id="project-modal" aria-labelledby="modal-title" data-lenis-prevent>
+    <button class="modal-close" type="button" aria-label="Close"><svg class="ico"><use href="#i-x"/></svg></button>
+    <div class="modal-inner">
+      <div class="modal-media"><img decoding="async" id="modal-img" src="" alt=""></div>
+      <div class="modal-body">
+        <p class="eyebrow" id="modal-cat"></p>
+        <h3 class="display" id="modal-title"></h3>
+        <p class="modal-role" id="modal-role"></p>
+        <p class="modal-desc" id="modal-desc"></p>
+        <h4 id="modal-list-title"></h4>
+        <ul class="check-list" id="modal-list"></ul>
+        <a href="#contact" class="btn" id="modal-cta">Start a similar project <svg class="ico"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="fx.js" defer></script>
+  <script src="script.js" defer></script>
+</body>
 </html>
