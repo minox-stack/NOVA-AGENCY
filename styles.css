@@ -1170,3 +1170,6 @@ html:not(.fx-lite) .work-grid, html:not(.fx-lite) .pillars, html:not(.fx-lite) .
   .footer-bar { flex-direction: column; justify-content: center; text-align: center; gap: 12px; padding-bottom: 96px; }
   .footer-brand { padding-block: 56px 36px; }
 }
+
+/* sending state */
+.btn:disabled { opacity: .6; cursor: progress; }
