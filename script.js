@@ -10,7 +10,9 @@
   const T = AR ? {
     formErr: 'يرجى إدخال اسمك، بريد إلكتروني صحيح ورسالة قصيرة.',
     formErrWA: 'يرجى إدخال اسمك ورسالة قصيرة.',
-    formOk: (e) => `جارٍ فتح تطبيق البريد… إذا لم يُفتح أي شيء، راسلني على ${e}`,
+    sending: 'جارٍ الإرسال…',
+    sent: 'شكراً! وصلتني رسالتك — سأرد عليك قريباً.',
+    sendFail: (e) => `تعذّر الإرسال الآن. راسلني على ${e} أو عبر واتساب.`,
     waOk: 'جارٍ فتح واتساب…',
     subject: (n) => `مشروع جديد — ${n}`,
     waHello: 'مرحباً أمين! وجدتك من خلال موقعك وأريد التحدث معك بخصوص مشروع.',
@@ -18,7 +20,9 @@
   } : {
     formErr: 'Please add your name, a valid email and a short message.',
     formErrWA: 'Please add your name and a short message.',
-    formOk: (e) => `Opening your email app… If nothing opens, write to ${e}.`,
+    sending: 'Sending…',
+    sent: "Thanks! Your message was sent — I'll get back to you soon.",
+    sendFail: (e) => `Couldn't send right now. Write to ${e} or use WhatsApp.`,
     waOk: 'Opening WhatsApp…',
     subject: (n) => `New project — ${n}`,
     waHello: "Hi Amine! I found you through your portfolio and I'd like to talk about a project.",
@@ -237,11 +241,25 @@
       note.textContent = T.waOk;
       return;
     }
-    const subject = T.subject(val('name'));
-    const body = `${val('message')}\n\n— ${val('name')}\n${val('email')}`;
-    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    note.className = 'form-note ok';
-    note.textContent = T.formOk(EMAIL);
+    // Email: delivered straight to the inbox through Formspree (the same form the old site used)
+    const btn = $('[data-send="email"]', form);
+    const data = new FormData(form);
+    data.append('_subject', T.subject(val('name')));
+    btn.disabled = true;
+    note.className = 'form-note';
+    note.textContent = T.sending;
+    fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Formspree ${res.status}`);
+        form.reset();
+        note.className = 'form-note ok';
+        note.textContent = T.sent;
+      })
+      .catch(() => {
+        note.className = 'form-note err';
+        note.textContent = T.sendFail(EMAIL);
+      })
+      .finally(() => { btn.disabled = false; });
   });
   form.addEventListener('input', (e) => {
     const f = e.target.closest('.field');
