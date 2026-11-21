@@ -10,6 +10,7 @@
   const T = AR ? {
     formErr: 'يرجى إدخال اسمك، بريد إلكتروني صحيح ورسالة قصيرة.',
     formErrWA: 'يرجى إدخال اسمك ورسالة قصيرة.',
+    rcTitle: 'وصل إرسال رسالة', rcSub: 'تم إرسال رسالتك إلى NOVA Agency', rcStatus: 'أُرسلت إلى NOVA Agency',
     sending: 'جارٍ الإرسال…',
     sent: 'شكراً! وصلتني رسالتك — سأرد عليك قريباً.',
     sendFail: (e) => `تعذّر الإرسال الآن. راسلني على ${e} أو عبر واتساب.`,
@@ -20,6 +21,7 @@
   } : {
     formErr: 'Please add your name, a valid email and a short message.',
     formErrWA: 'Please add your name and a short message.',
+    rcTitle: 'MESSAGE RECEIPT', rcSub: 'Your message was sent to NOVA Agency', rcStatus: 'Sent to NOVA Agency',
     sending: 'Sending…',
     sent: "Thanks! Your message was sent — I'll get back to you soon.",
     sendFail: (e) => `Couldn't send right now. Write to ${e} or use WhatsApp.`,
@@ -243,19 +245,26 @@
     }
     // Email: delivered straight to the inbox through Formspree (the same form the old site used)
     const btn = $('[data-send="email"]', form);
+    const now = new Date();
+    const entry = { no: receiptNo(now), date: receiptDate(now), name: val('name'), email: val('email'), message: val('message') };
+    const subject = `${T.subject(entry.name)} · ${entry.no}`;
     const data = new FormData(form);
-    data.append('_subject', T.subject(val('name')));
+    data.append('_subject', subject);
+    data.append('receipt', entry.no); // same number as the visitor's receipt
     btn.disabled = true;
     note.className = 'form-note';
     note.textContent = T.sending;
     // If Formspree refuses the quick (background) send — e.g. its anti-spam check —
     // fall back to a normal form post: it opens Formspree's page and still delivers the message.
     const classicSubmit = () => {
-      const extra = document.createElement('input');
-      extra.type = 'hidden'; extra.name = '_subject'; extra.value = T.subject(val('name'));
-      form.appendChild(extra);
+      const extras = [['_subject', subject], ['receipt', entry.no]].map(([n, v]) => {
+        const el = document.createElement('input');
+        el.type = 'hidden'; el.name = n; el.value = v;
+        form.appendChild(el);
+        return el;
+      });
       HTMLFormElement.prototype.submit.call(form);
-      setTimeout(() => { btn.disabled = false; extra.remove(); }, 4000);
+      setTimeout(() => { btn.disabled = false; extras.forEach((el) => el.remove()); }, 4000);
     };
     fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
       .then((res) => {
@@ -264,6 +273,7 @@
         note.className = 'form-note ok';
         note.textContent = T.sent;
         btn.disabled = false;
+        showReceipt(entry);
       })
       .catch((err) => {
         if (navigator.onLine !== false) { classicSubmit(); return; }
@@ -276,6 +286,184 @@
     const f = e.target.closest('.field');
     if (f) { f.classList.remove('invalid'); e.target.removeAttribute('aria-invalid'); }
   });
+
+  /* ---------- Send receipt: shown after "Send by email", can be saved as an image ---------- */
+  function receiptNo(d) {
+    const p = (n) => String(n).padStart(2, '0');
+    return `NOVA-${String(d.getFullYear()).slice(2)}${p(d.getMonth() + 1)}${p(d.getDate())}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+  }
+  function receiptDate(d) {
+    try { return new Intl.DateTimeFormat(AR ? 'ar-DZ' : 'en-GB', { dateStyle: 'long', timeStyle: 'short' }).format(d); }
+    catch (err) { return d.toLocaleString(); }
+  }
+  const rc = $('#receipt-modal');
+  let lastReceipt = null;
+  // decorative barcode made from the receipt number
+  const barcode = (code) => {
+    let x = 0;
+    const stops = [];
+    for (const ch of code + code) {
+      const c = ch.charCodeAt(0);
+      const w = 1 + (c % 4); const gap = 1 + ((c >> 2) % 3);
+      stops.push({ x, w });
+      x += w + gap;
+    }
+    return { stops, width: x };
+  };
+  function showReceipt(r) {
+    if (!rc || !rc.showModal) return;
+    lastReceipt = r;
+    $('#rc-no').textContent = r.no;
+    $('#rc-date').textContent = r.date;
+    $('#rc-name').textContent = r.name;
+    $('#rc-email').textContent = r.email;
+    $('#rc-message').textContent = r.message;
+    const bc = barcode(r.no);
+    $('.rc-barcode', rc).style.backgroundImage = `linear-gradient(90deg, ${bc.stops.map((s) => `transparent ${s.x}px, #fff ${s.x}px ${s.x + s.w}px, transparent ${s.x + s.w}px`).join(', ')})`;
+    $('.rc-barcode', rc).style.backgroundSize = `${bc.width}px 100%`;
+    const burstEl = $('.rc-burst', rc);
+    burstEl.replaceChildren(...Array.from({ length: 12 }, (_, i) => {
+      const s = document.createElement('i');
+      s.style.cssText = `--a:${i * 30}deg;--dl:${(0.35 + (i % 3) * 0.05).toFixed(2)}s;--c:${['#4ae083', '#ff4d7d', '#ffd1de', '#c084fc'][i % 4]}`;
+      return s;
+    }));
+    if (window.novaLenis) window.novaLenis.stop();
+    document.body.classList.add('modal-open');
+    rc.showModal();
+    rc.scrollTop = 0;
+  }
+  if (rc) {
+    rc.addEventListener('close', () => {
+      document.body.classList.remove('modal-open');
+      if (window.novaLenis) window.novaLenis.start();
+    });
+    rc.addEventListener('click', (e) => { if (e.target === rc) rc.close(); });
+    $('#rc-close').addEventListener('click', () => rc.close());
+    $('#rc-save').addEventListener('click', () => saveReceipt(lastReceipt));
+  }
+
+  const loadImg = (src) => new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+  async function saveReceipt(r) {
+    if (!r) return;
+    const W = 1080; const M = 90;
+    const BODY = AR ? '"Cairo", sans-serif' : '"Inter", sans-serif';
+    const DISP = AR ? '"Cairo", sans-serif' : '"Anton", sans-serif';
+    try { await Promise.all([document.fonts.load(`700 32px ${BODY}`), document.fonts.load(`400 60px ${DISP}`), document.fonts.load('400 30px "Anton"')]); } catch (err) { /* use fallback fonts */ }
+    const [mark, word] = await Promise.all([loadImg('assets/nova-mark.webp'), loadImg('assets/nova-wordmark.webp')]);
+
+    // measure the message first, so the image is exactly as tall as it needs to be
+    const mx = document.createElement('canvas').getContext('2d');
+    mx.direction = AR ? 'rtl' : 'ltr';
+    mx.font = `500 30px ${BODY}`;
+    const maxW = W - 2 * M;
+    const lines = [];
+    r.message.split(/\n/).forEach((para) => {
+      let line = '';
+      para.split(/\s+/).forEach((wd) => {
+        const test = line ? `${line} ${wd}` : wd;
+        if (mx.measureText(test).width > maxW && line) { lines.push(line); line = wd; } else line = test;
+      });
+      lines.push(line);
+    });
+    const MAXL = 8;
+    const shown = lines.slice(0, MAXL);
+    if (lines.length > MAXL) shown[MAXL - 1] += ' …';
+    const top = 440;
+    const msgY = top + 80 + 4 * 90;                 // message label
+    const divider = msgY + 52 + shown.length * 44;  // line under the message
+    const statusY = divider + 64;
+    const barTop = statusY + 60;
+    const cardBottom = barTop + 80 + 50;
+    const H = cardBottom + 130;
+
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const x = c.getContext('2d');
+
+    // background + glow
+    const bg = x.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, '#22081a'); bg.addColorStop(1, '#070407');
+    x.fillStyle = bg; x.fillRect(0, 0, W, H);
+    const glow = x.createRadialGradient(W * 0.85, 80, 0, W * 0.85, 80, 700);
+    glow.addColorStop(0, 'rgba(250,29,76,.38)'); glow.addColorStop(1, 'rgba(250,29,76,0)');
+    x.fillStyle = glow; x.fillRect(0, 0, W, H);
+
+    const S = AR ? W - M : M; // start edge
+    const E = AR ? M : W - M; // end edge
+    x.direction = AR ? 'rtl' : 'ltr';
+
+    // logo
+    if (mark) x.drawImage(mark, AR ? W - M - 110 : M, 80, 110, 110 * mark.height / mark.width);
+    if (word) { const ww = 300; x.drawImage(word, AR ? W - M - 130 - ww : M + 130, 115, ww, ww * word.height / word.width); }
+
+    // check badge
+    const cx = AR ? M + 60 : W - M - 60; const cy = 140;
+    x.fillStyle = 'rgba(74,224,131,.16)'; x.beginPath(); x.arc(cx, cy, 60, 0, 6.283); x.fill();
+    x.strokeStyle = '#4ae083'; x.lineWidth = 8; x.lineCap = 'round'; x.lineJoin = 'round';
+    x.beginPath(); x.moveTo(cx - 26, cy + 2); x.lineTo(cx - 8, cy + 20); x.lineTo(cx + 28, cy - 18); x.stroke();
+
+    // title
+    x.textAlign = 'start'; x.fillStyle = '#ffffff';
+    x.font = AR ? `900 64px ${DISP}` : `400 78px ${DISP}`;
+    x.fillText(T.rcTitle, S, 330);
+    x.fillStyle = '#ff4d7d'; x.font = `600 30px ${BODY}`;
+    x.fillText(T.rcSub, S, 385);
+
+    // ticket card
+    const cardH = cardBottom - top;
+    x.fillStyle = 'rgba(255,255,255,.05)'; x.strokeStyle = 'rgba(255,255,255,.16)'; x.lineWidth = 2;
+    x.beginPath();
+    if (x.roundRect) x.roundRect(M - 20, top, W - 2 * (M - 20), cardH, 32); else x.rect(M - 20, top, W - 2 * (M - 20), cardH);
+    x.fill(); x.stroke();
+
+    const fit = (txt, max) => { let t = txt; if (x.measureText(t).width <= max) return t; while (t.length && x.measureText(`${t}…`).width > max) t = t.slice(0, -1); return `${t}…`; };
+    const labels = $$('.rc-row > span, .rc-msg > span', rc).map((el) => el.textContent);
+    const row = (label, value, y, opts = {}) => {
+      x.textAlign = 'start'; x.fillStyle = '#9a909c'; x.font = `500 28px ${BODY}`;
+      x.fillText(label, S, y);
+      x.textAlign = 'end'; x.fillStyle = opts.color || '#ffffff'; x.font = opts.font || `700 32px ${BODY}`;
+      x.fillText(fit(value, W - 2 * M - 260), E, y);
+      x.strokeStyle = 'rgba(255,255,255,.1)'; x.setLineDash([8, 8]); x.lineWidth = 2;
+      x.beginPath(); x.moveTo(M, y + 30); x.lineTo(W - M, y + 30); x.stroke(); x.setLineDash([]);
+    };
+    let y = top + 80;
+    row(labels[0], r.no, y, { font: '400 36px "Anton", sans-serif' }); y += 90;
+    row(labels[1], r.date, y); y += 90;
+    row(labels[2], r.name, y); y += 90;
+    row(labels[3], r.email, y); y += 90;
+
+    // message, wrapped
+    x.textAlign = 'start'; x.fillStyle = '#9a909c'; x.font = `500 28px ${BODY}`;
+    x.fillText(labels[4], S, msgY);
+    x.fillStyle = '#e6dee6'; x.font = `500 30px ${BODY}`;
+    shown.forEach((ln, i) => x.fillText(fit(ln, maxW), S, msgY + 52 + i * 44));
+    x.strokeStyle = 'rgba(255,255,255,.1)'; x.setLineDash([8, 8]); x.lineWidth = 2;
+    x.beginPath(); x.moveTo(M, divider); x.lineTo(W - M, divider); x.stroke(); x.setLineDash([]);
+    row(labels[5], `✓ ${T.rcStatus}`, statusY, { color: '#4ae083' });
+
+    // barcode + footer
+    const bc = barcode(r.no);
+    const scale = 3;
+    const bw = Math.min(bc.width * scale, W - 2 * M);
+    const bx = (W - bw) / 2;
+    x.fillStyle = '#ffffff';
+    for (const s of bc.stops) {
+      if ((s.x + s.w) * scale > bw) break;
+      x.fillRect(bx + s.x * scale, barTop, s.w * scale, 80);
+    }
+    x.textAlign = 'center'; x.fillStyle = '#9a909c'; x.font = `500 26px ${BODY}`;
+    x.fillText('NOVA Agency · novadz.space', W / 2, H - 60);
+
+    c.toBlob((blob) => {
+      if (!blob) return;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${r.no}.png`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+    }, 'image/png');
+  }
 
   /* ---------- Language switch: open the other language at the same section ---------- */
   $$('.lang').forEach((a) => a.addEventListener('click', () => {
