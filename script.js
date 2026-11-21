@@ -248,18 +248,29 @@
     btn.disabled = true;
     note.className = 'form-note';
     note.textContent = T.sending;
+    // If Formspree refuses the quick (background) send — e.g. its anti-spam check —
+    // fall back to a normal form post: it opens Formspree's page and still delivers the message.
+    const classicSubmit = () => {
+      const extra = document.createElement('input');
+      extra.type = 'hidden'; extra.name = '_subject'; extra.value = T.subject(val('name'));
+      form.appendChild(extra);
+      HTMLFormElement.prototype.submit.call(form);
+      setTimeout(() => { btn.disabled = false; extra.remove(); }, 4000);
+    };
     fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
       .then((res) => {
         if (!res.ok) throw new Error(`Formspree ${res.status}`);
         form.reset();
         note.className = 'form-note ok';
         note.textContent = T.sent;
+        btn.disabled = false;
       })
-      .catch(() => {
+      .catch((err) => {
+        if (navigator.onLine !== false) { classicSubmit(); return; }
         note.className = 'form-note err';
         note.textContent = T.sendFail(EMAIL);
-      })
-      .finally(() => { btn.disabled = false; });
+        btn.disabled = false;
+      });
   });
   form.addEventListener('input', (e) => {
     const f = e.target.closest('.field');
