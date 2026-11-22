@@ -467,7 +467,7 @@
 
   /* ---------- Visitor comments: stored in a Google Sheet, shown after the owner approves ---------- */
   // Paste the Google Apps Script "Web app" URL here (see comments-backend/SETUP.md). Empty = comments off.
-  const COMMENTS_API = '';
+  const COMMENTS_API = 'https://script.google.com/macros/s/AKfycbzPsDuYuQvTYGnaMBTK6zE2GTnQqHyQys5V2-WpoO8zClT4YRIb7pwAEusXPMF31GksIw/exec';
   const SERVICE_LABELS = AR
     ? { web: 'تطوير موقع إلكتروني', video: 'مونتاج فيديو', ads: 'إعلانات مواقع التواصل', uxui: 'تصميم UX/UI', events: 'فعاليات', other: 'أخرى' }
     : { web: 'Website development', video: 'Video editing', ads: 'Social media ads', uxui: 'UX/UI design', events: 'Events', other: 'Other' };

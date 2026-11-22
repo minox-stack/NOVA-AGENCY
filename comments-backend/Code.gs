@@ -13,9 +13,16 @@ const SHEET_NAME = 'Comments';
 const HEADERS = ['Date', 'First name', 'Last name', 'Service', 'Comment', 'Language', 'Approved'];
 const SERVICES = ['web', 'video', 'ads', 'uxui', 'events', 'other'];
 const MAX_PUBLIC = 60; // newest approved comments sent to the site
+// The spreadsheet's ID (from its address: /spreadsheets/d/<ID>/edit). Leave empty if this
+// script was opened from the sheet itself (Extensions → Apps Script).
+const SHEET_ID = '';
+
+function book_() {
+  return SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
+}
 
 function getSheet_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = book_();
   let sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) {
     sh = ss.insertSheet(SHEET_NAME);
@@ -93,7 +100,7 @@ function doPost(e) {
       Session.getEffectiveUser().getEmail(),
       'New comment on novadz.space — ' + first + ' ' + last,
       first + ' ' + last + ' (' + service + ') wrote:\n\n' + comment +
-        '\n\nTick "Approved" to show it on the site:\n' + SpreadsheetApp.getActiveSpreadsheet().getUrl()
+        '\n\nTick "Approved" to show it on the site:\n' + book_().getUrl()
     );
   } catch (err) { /* e-mail is optional */ }
 
