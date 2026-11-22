@@ -19,7 +19,16 @@
    const COMMENTS_API = '';
    ```
 
-## كيفاش توافق على تعليق
+## لوحة التحكم — novadz.space/admin
+
+من هنا تنشر/تخفي/تمسح التعليقات وتبدّل حالتك (متاح / مشغول) بلا ما تحل الجدول.
+
+- **كلمة السر** ماهيش في الكود: Apps Script → ⚙️ **Project Settings** → **Script Properties** → `ADMIN_KEY` = كلمة السر تاعك (8 حروف على الأقل) → **Save script properties**.
+- باش تبدّلها: بدّل القيمة تاع `ADMIN_KEY` واحفظ — كل الأجهزة اللي كانت داخلة تخرج وحدها.
+- 10 محاولات غالطة → اللوحة تتسكّر 15 دقيقة.
+- «تذكّرني» = تبقى داخل 30 يوم على هذاك الجهاز؛ بلاها = 12 ساعة.
+
+## كيفاش توافق على تعليق من الجدول (إذا حبيت)
 
 - حل الجدول → تبويب **Comments**.
 - حط ✓ في خانة **Approved** → التعليق يبان في الموقع (في دقيقتين على الأكثر).
@@ -42,4 +51,4 @@
 
 ---
 
-**English (short):** create a Google Sheet → Extensions → Apps Script → paste `Code.gs` → run `setup` once and allow → Deploy as **Web app** (Execute as: Me, Access: Anyone) → put the `/exec` URL in `COMMENTS_API` in `script.js`. Tick **Approved** in the sheet to publish a comment. Live status: pick Available or Busy in cell **B1** of the **Status** tab (optional notes in B2 English / B3 Arabic); the site follows within 2 minutes.
+**English (short):** create a Google Sheet → Extensions → Apps Script → paste `Code.gs` → run `setup` once and allow → Deploy as **Web app** (Execute as: Me, Access: Anyone) → put the `/exec` URL in `COMMENTS_API` in `script.js`. Tick **Approved** in the sheet to publish a comment. Live status: pick Available or Busy in cell **B1** of the **Status** tab (optional notes in B2 English / B3 Arabic); the site follows within 2 minutes. Dashboard: **novadz.space/admin** — set the password as the `ADMIN_KEY` script property (Project Settings → Script Properties); it is never stored in the code.
