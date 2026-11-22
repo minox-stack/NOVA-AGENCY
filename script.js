@@ -598,6 +598,53 @@
     });
   }
 
+  /* ---------- Live status: Available / Busy, switched from the "Status" tab of the same Google Sheet ---------- */
+  const ST = AR ? {
+    available: { long: 'متاح للعمل', short: 'متاح', line: 'متاح لمشاريع جديدة — راسلني ولنبدأ.' },
+    busy: { long: 'مشغول حالياً', short: 'مشغول', line: 'مشغول حالياً — يمكنك مراسلتي وسأرد عليك فور تفرّغي.' },
+  } : {
+    available: { long: 'Available for work', short: 'Available', line: "Available for new projects — message me and let's start." },
+    busy: { long: 'Busy right now', short: 'Busy', line: "Busy right now — you can still message me, I'll reply as soon as I'm free." },
+  };
+  const statusEls = $$('[data-status]');
+  const STATUS_TTL = 120000; // same 2 minutes as the comments
+  const showStatus = (s) => {
+    if (!s || !ST[s.state]) return;
+    const L = ST[s.state];
+    // optional note from the sheet (B2 English, B3 Arabic), e.g. "back on 5 December"
+    const note = (AR ? s.noteAr || s.note : s.note || s.noteAr) || '';
+    statusEls.forEach((el) => {
+      el.dataset.state = s.state;
+      const put = (sel, txt) => { const n = $(sel, el); if (n) n.textContent = txt; };
+      put('.st-long', L.long);
+      put('.st-short', L.short);
+      put('.st-text', note ? `${L.long} — ${note}` : L.line);
+      if (el.tagName === 'A') el.title = note ? `${L.long} — ${note}` : L.long;
+    });
+  };
+  const loadStatus = () => {
+    if (!COMMENTS_API || !statusEls.length) return;
+    try {
+      const o = JSON.parse(sessionStorage.getItem('novaStatus') || 'null');
+      if (o && Date.now() - o.t < STATUS_TTL) { showStatus(o.s); return; }
+    } catch (err) { /* no cache */ }
+    fetch(`${COMMENTS_API}?status=1`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (!d || !d.ok || !d.status) return;
+        showStatus(d.status);
+        try { sessionStorage.setItem('novaStatus', JSON.stringify({ t: Date.now(), s: d.status })); } catch (err) { /* ignore */ }
+      })
+      .catch(() => { /* no badge if the sheet can't be reached */ });
+  };
+  if (statusEls.length && COMMENTS_API) {
+    if (document.readyState === 'complete') loadStatus();
+    else addEventListener('load', loadStatus, { once: true });
+    // stays live while the page is open: re-checks every ~2 minutes, and when the tab comes back into view
+    setInterval(() => { if (!document.hidden) loadStatus(); }, STATUS_TTL + 1000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) loadStatus(); });
+  }
+
   /* ---------- Language switch: open the other language at the same section ---------- */
   $$('.lang').forEach((a) => a.addEventListener('click', () => {
     const mid = innerHeight / 2;

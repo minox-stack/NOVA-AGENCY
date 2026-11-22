@@ -48,8 +48,43 @@ function asText_(s) {
   return /^[=+\-@]/.test(s) ? "'" + s : s;
 }
 
-/** The site reads approved comments (newest first). */
-function doGet() {
+/* ---------- Live status (Available / Busy), set in the "Status" tab ---------- */
+const STATUS_SHEET = 'Status';
+const STATUS_CHOICES = ['Available — متاح', 'Busy — مشغول'];
+
+function getStatusSheet_() {
+  const ss = book_();
+  let sh = ss.getSheetByName(STATUS_SHEET);
+  if (!sh) {
+    sh = ss.insertSheet(STATUS_SHEET);
+    sh.getRange('A1:A3').setValues([['Status — الحالة'], ['Note in English (optional)'], ['ملاحظة بالعربية (اختياري)']]).setFontWeight('bold');
+    sh.getRange('B1').setValue(STATUS_CHOICES[0]).setFontWeight('bold')
+      .setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(STATUS_CHOICES, true).setAllowInvalid(false).build());
+    sh.getRange('A5').setValue('Pick Available or Busy in B1 — the site updates within 2 minutes. / اختر الحالة في B1، والموقع يتحدّث خلال دقيقتين.').setFontColor('#888888');
+    sh.setColumnWidth(1, 220);
+    sh.setColumnWidth(2, 280);
+    const b1 = sh.getRange('B1');
+    sh.setConditionalFormatRules([
+      SpreadsheetApp.newConditionalFormatRule().whenTextContains('Available').setBackground('#c9f2d6').setFontColor('#0b6b2e').setRanges([b1]).build(),
+      SpreadsheetApp.newConditionalFormatRule().whenTextContains('Busy').setBackground('#ffd3d3').setFontColor('#9b1111').setRanges([b1]).build(),
+    ]);
+  }
+  return sh;
+}
+
+function getStatus_() {
+  const v = getStatusSheet_().getRange('B1:B3').getValues();
+  const raw = String(v[0][0]).toLowerCase();
+  return {
+    state: raw.indexOf('busy') >= 0 || raw.indexOf('مشغول') >= 0 ? 'busy' : 'available',
+    note: cleanLine_(v[1][0], 80),
+    noteAr: cleanLine_(v[2][0], 80),
+  };
+}
+
+/** The site reads approved comments (newest first) — or only the status with ?status=1. */
+function doGet(e) {
+  if (e && e.parameter && e.parameter.status) return json_({ ok: true, status: getStatus_() });
   const rows = getSheet_().getDataRange().getValues().slice(1);
   const comments = rows
     .filter((r) => r[6] === true)
@@ -62,7 +97,7 @@ function doGet() {
     }))
     .reverse()
     .slice(0, MAX_PUBLIC);
-  return json_({ ok: true, comments: comments });
+  return json_({ ok: true, comments: comments, status: getStatus_() });
 }
 
 /** A visitor posts a new comment (saved as "not approved"). */
@@ -107,7 +142,26 @@ function doPost(e) {
   return json_({ ok: true });
 }
 
-/** Run once from the editor (▶ Run) to create the "Comments" tab and grant permissions. */
+/** Run once from the editor (▶ Run) to create the "Comments" and "Status" tabs and grant permissions. */
 function setup() {
   getSheet_();
+  getStatusSheet_();
+}
+
+/** One-time tidy: Comments tab first, columns fit on screen, Approved highlighted. */
+function tidy() {
+  const ss = book_();
+  const sh = getSheet_();
+  ss.setActiveSheet(sh);
+  ss.moveActiveSheet(1);
+  sh.setColumnWidth(1, 120);
+  sh.setColumnWidths(2, 2, 105);
+  sh.setColumnWidth(4, 80);
+  sh.setColumnWidth(5, 240);
+  sh.setColumnWidth(6, 70);
+  sh.setColumnWidth(7, 150);
+  sh.getRange('E:E').setWrap(true);
+  sh.getRange(1, 1, 1, 7).setFontWeight('bold');
+  sh.getRange(1, 7).setValue('✓ Approved (tick to publish)').setBackground('#25d366').setFontColor('#ffffff');
+  sh.getRange('G2:G').setBackground('#e8f8ee').setHorizontalAlignment('center');
 }
