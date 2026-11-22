@@ -1,18 +1,21 @@
 /**
- * NOVA Agency — visitor comments (Google Sheets + Apps Script)
+ * NOVA Agency — visitor comments, live status and admin dashboard (Google Sheets + Apps Script)
  *
  * - Visitors post a comment from novadz.space  → a new row appears in the "Comments" tab.
- * - New rows are NOT public: tick the "Approved" checkbox to show a comment on the site.
- * - Untick it (or delete the row) to hide it again.
- * - You get an email for every new comment, with a link to this sheet.
+ * - New rows are NOT public: approve them from the dashboard (novadz.space/admin)
+ *   or tick the "Approved" checkbox in the sheet.
+ * - Your status (Available / Busy) is in the "Status" tab — also switchable from the dashboard.
+ * - You get an email for every new comment, with a link to the dashboard.
+ * - The dashboard password is NOT in this code: Project Settings → Script properties → ADMIN_KEY.
  *
  * Setup: see SETUP.md next to this file.
  */
 
 const SHEET_NAME = 'Comments';
-const HEADERS = ['Date', 'First name', 'Last name', 'Service', 'Comment', 'Language', 'Approved'];
+const HEADERS = ['Date', 'First name', 'Last name', 'Service', 'Comment', 'Language', 'Approved', 'ID'];
 const SERVICES = ['web', 'video', 'ads', 'uxui', 'events', 'other'];
 const MAX_PUBLIC = 60; // newest approved comments sent to the site
+const ADMIN_URL = 'https://novadz.space/admin';
 // The spreadsheet's ID (from its address: /spreadsheets/d/<ID>/edit). Leave empty if this
 // script was opened from the sheet itself (Extensions → Apps Script).
 const SHEET_ID = '';
@@ -30,6 +33,7 @@ function getSheet_() {
     sh.setFrozenRows(1);
     sh.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
     sh.setColumnWidth(5, 420);
+    sh.hideColumns(8);
   }
   return sh;
 }
@@ -46,6 +50,12 @@ function cleanLine_(v, max) {
 // stop "=", "+", "-", "@" at the start from being read as a spreadsheet formula
 function asText_(s) {
   return /^[=+\-@]/.test(s) ? "'" + s : s;
+}
+
+function withLock_(fn) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try { return fn(); } finally { lock.releaseLock(); }
 }
 
 /* ---------- Live status (Available / Busy), set in the "Status" tab ---------- */
@@ -100,10 +110,12 @@ function doGet(e) {
   return json_({ ok: true, comments: comments, status: getStatus_() });
 }
 
-/** A visitor posts a new comment (saved as "not approved"). */
+/** A visitor posts a new comment (saved as "not approved") — or the dashboard sends an admin action. */
 function doPost(e) {
   let d = {};
-  try { d = JSON.parse(e.postData.contents); } catch (err) { d = e.parameter || {}; }
+  try { d = JSON.parse(e.postData.contents); } catch (err) { d = (e && e.parameter) || {}; }
+
+  if (d.admin) return json_(admin_(d));
 
   if (d.website) return json_({ ok: true }); // hidden field filled → a bot, silently ignored
 
@@ -120,32 +132,182 @@ function doPost(e) {
   if (recent >= 30) return json_({ ok: false, error: 'busy' });
   cache.put('recent', String(recent + 1), 60);
 
-  const lock = LockService.getScriptLock();
-  lock.waitLock(10000);
-  try {
+  withLock_(() => {
     const sh = getSheet_();
-    sh.appendRow([new Date(), asText_(first), asText_(last), service, asText_(comment), lang, false]);
+    sh.appendRow([new Date(), asText_(first), asText_(last), service, asText_(comment), lang, false, Utilities.getUuid()]);
     sh.getRange(sh.getLastRow(), 7).insertCheckboxes();
-  } finally {
-    lock.releaseLock();
-  }
+  });
 
   try {
     MailApp.sendEmail(
       Session.getEffectiveUser().getEmail(),
       'New comment on novadz.space — ' + first + ' ' + last,
       first + ' ' + last + ' (' + service + ') wrote:\n\n' + comment +
-        '\n\nTick "Approved" to show it on the site:\n' + book_().getUrl()
+        '\n\nPublish or delete it from your dashboard:\n' + ADMIN_URL +
+        '\n\n(or tick "Approved" in the sheet: ' + book_().getUrl() + ')'
     );
   } catch (err) { /* e-mail is optional */ }
 
   return json_({ ok: true });
 }
 
-/** Run once from the editor (▶ Run) to create the "Comments" and "Status" tabs and grant permissions. */
+/* ---------- Admin dashboard (novadz.space/admin) ---------- */
+const SESSION_LONG = 30 * 864e5; // "remember me": 30 days
+const SESSION_SHORT = 12 * 36e5; // otherwise: 12 hours
+const MAX_FAILS = 10; // wrong passwords allowed per 15 minutes
+
+function sha_(s) {
+  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, String(s), Utilities.Charset.UTF_8)
+    .map((b) => ('0' + (b & 255).toString(16)).slice(-2)).join('');
+}
+
+function adminKey_() {
+  return String(PropertiesService.getScriptProperties().getProperty('ADMIN_KEY') || '');
+}
+
+// sessions = { sha(token): { e: expiry ms, k: password fingerprint } } — changing ADMIN_KEY logs everyone out
+function sessions_() {
+  try { return JSON.parse(PropertiesService.getScriptProperties().getProperty('ADMIN_SESSIONS') || '{}') || {}; } catch (err) { return {}; }
+}
+
+function saveSessions_(s) {
+  PropertiesService.getScriptProperties().setProperty('ADMIN_SESSIONS', JSON.stringify(s));
+}
+
+function newToken_(key, remember) {
+  const now = Date.now();
+  const s = sessions_();
+  const keep = Object.keys(s)
+    .filter((h) => s[h] && s[h].e > now)
+    .sort((a, b) => s[b].e - s[a].e)
+    .slice(0, 19);
+  const next = {};
+  keep.forEach((h) => { next[h] = s[h]; });
+  const token = (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, '');
+  next[sha_(token)] = { e: now + (remember ? SESSION_LONG : SESSION_SHORT), k: sha_(key).slice(0, 16) };
+  saveSessions_(next);
+  return token;
+}
+
+function tokenOk_(token, key) {
+  if (!token) return false;
+  const v = sessions_()[sha_(token)];
+  return !!v && v.e > Date.now() && v.k === sha_(key).slice(0, 16);
+}
+
+function dropToken_(token) {
+  const s = sessions_();
+  delete s[sha_(token)];
+  saveSessions_(s);
+}
+
+function admin_(d) {
+  const key = adminKey_();
+  if (key.length < 8) return { ok: false, error: 'nokey' };
+
+  if (d.admin === 'login') {
+    const cache = CacheService.getScriptCache();
+    const fails = Number(cache.get('adminFails') || 0);
+    if (fails >= MAX_FAILS) return { ok: false, error: 'locked' };
+    if (sha_(d.password || '') !== sha_(key)) {
+      cache.put('adminFails', String(fails + 1), 900);
+      return { ok: false, error: 'wrong' };
+    }
+    cache.remove('adminFails');
+    return withLock_(() => ({ ok: true, token: newToken_(key, d.remember === true) }));
+  }
+
+  if (!tokenOk_(d.token, key)) return { ok: false, error: 'auth' };
+
+  switch (d.admin) {
+    case 'data': return withLock_(() => ({ ok: true, comments: allComments_(), status: getStatus_() }));
+    case 'approve': return withLock_(() => setApproved_(String(d.id || ''), d.value === true));
+    case 'delete': return withLock_(() => deleteComment_(String(d.id || '')));
+    case 'status': return withLock_(() => setStatus_(d));
+    case 'logout': return withLock_(() => { dropToken_(d.token); return { ok: true }; });
+    default: return { ok: false, error: 'unknown' };
+  }
+}
+
+// every comment row gets a hidden ID (column H) so the dashboard can point at it safely
+function ensureIds_(sh) {
+  if (sh.getRange(1, 8).getValue() !== 'ID') {
+    sh.getRange(1, 8).setValue('ID').setFontWeight('bold');
+    sh.hideColumns(8);
+  }
+  const n = sh.getLastRow() - 1;
+  if (n < 1) return;
+  const range = sh.getRange(2, 8, n, 1);
+  const ids = range.getValues();
+  let changed = false;
+  ids.forEach((row) => { if (!row[0]) { row[0] = Utilities.getUuid(); changed = true; } });
+  if (changed) range.setValues(ids);
+}
+
+function allComments_() {
+  const sh = getSheet_();
+  ensureIds_(sh);
+  const last = sh.getLastRow();
+  if (last < 2) return [];
+  return sh.getRange(2, 1, last - 1, 8).getValues()
+    .filter((r) => String(r[1]).trim() || String(r[4]).trim())
+    .map((r) => ({
+      id: String(r[7]),
+      date: r[0] instanceof Date ? r[0].toISOString() : String(r[0]),
+      first: String(r[1]),
+      last: String(r[2]),
+      service: String(r[3]),
+      comment: String(r[4]),
+      lang: String(r[5]),
+      approved: r[6] === true,
+    }))
+    .reverse()
+    .slice(0, 300);
+}
+
+function findRow_(sh, id) {
+  if (!id) return -1;
+  const last = sh.getLastRow();
+  if (last < 2) return -1;
+  const ids = sh.getRange(2, 8, last - 1, 1).getValues();
+  for (let i = 0; i < ids.length; i++) if (String(ids[i][0]) === id) return i + 2;
+  return -1;
+}
+
+function setApproved_(id, value) {
+  const sh = getSheet_();
+  const row = findRow_(sh, id);
+  if (row < 0) return { ok: false, error: 'gone' };
+  const cell = sh.getRange(row, 7);
+  if (!cell.getDataValidation()) cell.insertCheckboxes();
+  cell.setValue(value);
+  return { ok: true };
+}
+
+function deleteComment_(id) {
+  const sh = getSheet_();
+  const row = findRow_(sh, id);
+  if (row < 0) return { ok: false, error: 'gone' };
+  sh.deleteRow(row);
+  return { ok: true };
+}
+
+function setStatus_(d) {
+  const busy = d.state === 'busy';
+  getStatusSheet_().getRange('B1:B3').setValues([
+    [STATUS_CHOICES[busy ? 1 : 0]],
+    [asText_(cleanLine_(d.note, 80))],
+    [asText_(cleanLine_(d.noteAr, 80))],
+  ]);
+  return { ok: true, status: getStatus_() };
+}
+
+/** Run once from the editor (▶ Run) to create the tabs, add comment IDs and grant permissions. */
 function setup() {
-  getSheet_();
+  const sh = getSheet_();
+  ensureIds_(sh);
   getStatusSheet_();
+  PropertiesService.getScriptProperties().getProperty('ADMIN_KEY'); // asks for the storage permission now
 }
 
 /** One-time tidy: Comments tab first, columns fit on screen, Approved highlighted. */

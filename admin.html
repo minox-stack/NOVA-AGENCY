@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#080509">
+  <title>لوحة التحكم — NOVA</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080509; --surface: rgba(255, 255, 255, .035); --line: rgba(255, 255, 255, .09); --line-2: rgba(255, 255, 255, .16);
+      --text: #f4f2ef; --muted: #a59aa7; --red: #fa1d4c; --red-2: #ff4d7d;
+      --green: 43, 213, 118; --amber: 255, 176, 64;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
+      font-family: "Cairo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.6;
+      background-image:
+        radial-gradient(900px 500px at 85% -10%, rgba(250, 29, 76, .22), transparent 60%),
+        radial-gradient(700px 500px at -10% 110%, rgba(122, 6, 50, .35), transparent 60%);
+      background-attachment: fixed;
+    }
+    button, input { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    [hidden] { display: none !important; }
+    .wrap { width: min(760px, 100% - 32px); margin-inline: auto; padding-block: 18px 60px; }
+
+    .glass {
+      position: relative; border-radius: 22px; border: 1px solid var(--line);
+      background: linear-gradient(160deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .015));
+      -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 24px 60px -30px rgba(0, 0, 0, .9);
+    }
+
+    /* top bar */
+    .top { display: flex; align-items: center; gap: 10px; padding: 10px 12px 10px 10px; padding-inline: 14px 10px; margin-bottom: 18px; border-radius: 18px; }
+    .brand { display: inline-flex; align-items: center; gap: 8px; direction: ltr; text-decoration: none; }
+    .brand img:first-child { height: 30px; width: auto; filter: drop-shadow(0 0 10px rgba(250, 29, 76, .4)); }
+    .brand img:last-child { height: 11px; width: auto; }
+    .top h1 { margin: 0; font-size: 15px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+    .top .sp { flex: 1; }
+    .icon-btn {
+      display: inline-flex; align-items: center; gap: 6px; height: 38px; padding-inline: 12px; border-radius: 999px;
+      border: 1px solid var(--line-2); background: rgba(255, 255, 255, .03); color: inherit; font-size: 14px; font-weight: 600; text-decoration: none;
+      transition: background-color .25s, border-color .25s;
+    }
+    .icon-btn:hover { background: rgba(250, 29, 76, .12); border-color: var(--red); }
+    .icon-btn svg { width: 16px; height: 16px; }
+    @media (max-width: 420px) { .top h1 { display: none; } .icon-btn .lbl { display: none; } .icon-btn { width: 38px; padding: 0; justify-content: center; } }
+
+    /* login */
+    .login { max-width: 420px; margin: 9vh auto 0; padding: 30px 24px 26px; text-align: center; }
+    .login img { height: 64px; width: auto; filter: drop-shadow(0 0 18px rgba(250, 29, 76, .5)); }
+    .login h2 { margin: 10px 0 4px; font-size: 26px; font-weight: 900; }
+    .login p { margin: 0 0 20px; color: var(--muted); font-size: 14px; }
+    .field { display: block; text-align: start; margin-bottom: 14px; }
+    .field span { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--muted); }
+    .field input {
+      width: 100%; padding: 13px 16px; border-radius: 14px; border: 1px solid var(--line-2);
+      background: rgba(255, 255, 255, .04); font-size: 16px; transition: border-color .25s, background-color .25s;
+    }
+    .field input:focus { outline: none; border-color: var(--red); background: rgba(250, 29, 76, .06); }
+    .check { display: flex; align-items: center; gap: 10px; margin: 4px 0 18px; font-size: 14px; color: var(--muted); cursor: pointer; }
+    .check input { width: 18px; height: 18px; accent-color: var(--red); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 22px;
+      border: 0; border-radius: 999px; background: linear-gradient(135deg, var(--red), var(--red-2)); color: #fff;
+      font-weight: 700; font-size: 15px; box-shadow: 0 12px 30px -12px rgba(250, 29, 76, .8);
+      transition: transform .2s var(--ease), opacity .2s;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn[disabled], .act[disabled], .seg button[disabled] { opacity: .55; pointer-events: none; }
+    .btn.full { width: 100%; }
+    .msg { min-height: 22px; margin: 12px 0 0; font-size: 14px; color: #ff8fa6; }
+    .msg.ok { color: rgb(var(--green)); }
+
+    /* sections */
+    .card { padding: 20px 18px; margin-bottom: 18px; }
+    .card h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; font-size: 19px; font-weight: 900; }
+    .card h2 small { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .hint { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
+
+    /* status */
+    .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .seg button {
+      --c: var(--green);
+      display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 64px; padding: 10px;
+      border-radius: 18px; border: 1px solid var(--line-2); background: rgba(255, 255, 255, .03);
+      font-size: 17px; font-weight: 700; color: var(--muted);
+      transition: background-color .3s, border-color .3s, color .3s, box-shadow .3s;
+    }
+    .seg button[data-state="busy"] { --c: var(--amber); }
+    .seg button i { position: relative; width: 11px; height: 11px; border-radius: 50%; background: rgba(var(--c), .45); }
+    .seg button.on { color: #fff; border-color: rgba(var(--c), .7); background: rgba(var(--c), .14); box-shadow: 0 0 0 1px rgba(var(--c), .25), 0 14px 34px -18px rgba(var(--c), .9); }
+    .seg button.on i { background: rgb(var(--c)); box-shadow: 0 0 12px rgba(var(--c), .9); }
+    .seg button.on[data-state="available"] i::after {
+      content: ""; position: absolute; inset: 0; border-radius: inherit; background: rgb(var(--c)); animation: pulse 2s ease-out infinite;
+    }
+    @keyframes pulse { from { transform: scale(1); opacity: .75; } to { transform: scale(3); opacity: 0; } }
+    details.notes { margin-top: 14px; }
+    details.notes summary { cursor: pointer; font-size: 14px; font-weight: 600; color: var(--muted); }
+    details.notes[open] summary { margin-bottom: 12px; }
+    .notes-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+    @media (max-width: 560px) { .notes-row { grid-template-columns: 1fr; } }
+    .notes .btn { min-height: 40px; font-size: 14px; padding: 0 18px; }
+
+    /* comments */
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .tabs button {
+      display: inline-flex; align-items: center; gap: 8px; height: 38px; padding-inline: 14px; border-radius: 999px;
+      border: 1px solid var(--line-2); background: rgba(255, 255, 255, .03); font-size: 14px; font-weight: 600; color: var(--muted);
+    }
+    .tabs button b { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: rgba(255, 255, 255, .08); font-size: 12px; line-height: 22px; text-align: center; }
+    .tabs button.on { color: #fff; border-color: var(--red); background: rgba(250, 29, 76, .14); }
+    .tabs button.on b { background: var(--red); }
+    .list { display: grid; gap: 12px; }
+    .item { padding: 16px; border-radius: 18px; border: 1px solid var(--line); background: rgba(255, 255, 255, .025); animation: in .5s var(--ease) both; }
+    .item.pending { border-color: rgba(var(--amber), .35); background: rgba(var(--amber), .045); }
+    @keyframes in { from { opacity: 0; transform: translateY(10px); } }
+    .who { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--red), #7a0632); font-weight: 900; color: #fff;
+    }
+    .who b { display: block; font-size: 16px; line-height: 1.3; }
+    .who small { display: block; color: var(--muted); font-size: 12.5px; }
+    .tag { margin-inline-start: auto; align-self: flex-start; flex: none; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .tag.pending { color: rgb(var(--amber)); background: rgba(var(--amber), .12); }
+    .tag.live { color: rgb(var(--green)); background: rgba(var(--green), .12); }
+    .item blockquote { margin: 12px 0 14px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15px; }
+    .acts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .act {
+      display: inline-flex; align-items: center; gap: 6px; height: 38px; padding-inline: 16px; border-radius: 999px;
+      border: 1px solid var(--line-2); background: rgba(255, 255, 255, .03); font-size: 14px; font-weight: 700;
+    }
+    .act.publish { border-color: rgba(var(--green), .6); background: rgba(var(--green), .14); color: #d6ffe6; }
+    .act.del { color: #ff8fa6; border-color: rgba(250, 29, 76, .35); margin-inline-start: auto; }
+    .act svg { width: 15px; height: 15px; }
+    .empty { padding: 26px 10px; text-align: center; color: var(--muted); font-size: 14px; }
+    .loading { padding: 30px 0; text-align: center; color: var(--muted); }
+
+    .toast {
+      position: fixed; inset-inline: 0; bottom: 22px; margin-inline: auto; width: max-content; max-width: calc(100% - 32px);
+      padding: 10px 18px; border-radius: 999px; background: #1b121c; border: 1px solid var(--line-2);
+      box-shadow: 0 20px 40px -18px #000; font-size: 14px; font-weight: 600; z-index: 10;
+      transform: translateY(20px); opacity: 0; pointer-events: none; transition: transform .35s var(--ease), opacity .35s;
+    }
+    .toast.show { transform: none; opacity: 1; }
+    .toast.err { border-color: rgba(250, 29, 76, .6); color: #ffb3c3; }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></symbol>
+    <symbol id="i-reload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></symbol>
+    <symbol id="i-site" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.2A10 10 0 0 1 12 4c7 0 10 8 10 8a17 17 0 0 1-2.2 3.4M6.6 6.6A17 17 0 0 0 2 12s3 8 10 8a9.7 9.7 0 0 0 5.4-1.6"/><path d="m2 2 20 20"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></symbol>
+  </svg>
+
+  <div class="wrap">
+    <!-- Login -->
+    <form class="login glass" id="login" hidden>
+      <img src="assets/nova-mark.webp" alt="" width="300" height="283">
+      <h2>لوحة التحكم</h2>
+      <p>التعليقات وحالتك (متاح / مشغول) — من هنا مباشرة.</p>
+      <label class="field"><span>كلمة السر</span><input type="password" name="password" autocomplete="current-password" required></label>
+      <label class="check"><input type="checkbox" name="remember" checked> تذكّرني على هذا الجهاز</label>
+      <button class="btn full" type="submit">دخول</button>
+      <p class="msg" id="login-msg" role="alert"></p>
+    </form>
+
+    <!-- Dashboard -->
+    <div id="app" hidden>
+      <header class="top glass">
+        <a class="brand" href="./" aria-label="NOVA"><img src="assets/nova-mark.webp" alt="" width="300" height="283"><img src="assets/nova-wordmark.webp" alt="" width="440" height="48"></a>
+        <h1>لوحة التحكم</h1>
+        <span class="sp"></span>
+        <a class="icon-btn" href="./" target="_blank" rel="noopener" title="فتح الموقع"><svg><use href="#i-site"/></svg><span class="lbl">الموقع</span></a>
+        <button class="icon-btn" type="button" id="reload" title="تحديث"><svg><use href="#i-reload"/></svg><span class="lbl">تحديث</span></button>
+        <button class="icon-btn" type="button" id="logout" title="خروج"><svg><use href="#i-out"/></svg><span class="lbl">خروج</span></button>
+      </header>
+
+      <section class="card glass" aria-labelledby="st-title">
+        <h2 id="st-title">حالتك الآن <small>تظهر في أعلى الموقع وفي قسم التواصل</small></h2>
+        <div class="seg" id="seg">
+          <button type="button" data-state="available"><i></i>متاح للعمل</button>
+          <button type="button" data-state="busy"><i></i>مشغول</button>
+        </div>
+        <details class="notes" id="notes">
+          <summary>إضافة ملاحظة (اختياري) — مثلاً: أعود يوم 5 ديسمبر</summary>
+          <div class="notes-row">
+            <label class="field"><span>بالعربية</span><input name="noteAr" maxlength="80" placeholder="أعود يوم 5 ديسمبر" dir="auto"></label>
+            <label class="field"><span>English</span><input name="note" maxlength="80" placeholder="Back on 5 December" dir="ltr"></label>
+          </div>
+          <button class="btn" type="button" id="save-notes">حفظ الملاحظة</button>
+        </details>
+        <p class="hint">بعد أي تغيير، الموقع يتحدّث خلال دقيقتين على الأكثر.</p>
+      </section>
+
+      <section class="card glass" aria-labelledby="cm-title">
+        <h2 id="cm-title">التعليقات</h2>
+        <div class="tabs" id="tabs" role="tablist">
+          <button type="button" role="tab" data-f="pending">في الانتظار <b>0</b></button>
+          <button type="button" role="tab" data-f="live">منشورة <b>0</b></button>
+          <button type="button" role="tab" data-f="all">الكل <b>0</b></button>
+        </div>
+        <div class="list" id="list"><p class="loading">جارٍ التحميل…</p></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+  (() => {
+    'use strict';
+    // same Google Apps Script web app as the comments on the site
+    const API = 'https://script.google.com/macros/s/AKfycbzPsDuYuQvTYGnaMBTK6zE2GTnQqHyQys5V2-WpoO8zClT4YRIb7pwAEusXPMF31GksIw/exec';
+    const KEY = 'novaAdminToken';
+    const SERVICES = { web: 'تطوير موقع', video: 'مونتاج فيديو', ads: 'إعلانات', uxui: 'UX/UI', events: 'فعاليات', other: 'أخرى' };
+    const ERR = {
+      wrong: 'كلمة السر غير صحيحة.',
+      locked: 'محاولات كثيرة — جرّب بعد 15 دقيقة.',
+      nokey: 'كلمة السر لم تُضبط بعد (ADMIN_KEY في إعدادات Apps Script).',
+      auth: 'انتهت الجلسة — ادخل من جديد.',
+      gone: 'هذا التعليق لم يعد موجوداً — تم التحديث.',
+      net: 'تعذّر الاتصال — تحقق من الإنترنت وحاول مجدداً.',
+    };
+    const $ = (s, el = document) => el.querySelector(s);
+    const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+
+    const store = {
+      get() { try { return localStorage.getItem(KEY) || sessionStorage.getItem(KEY) || ''; } catch (e) { return ''; } },
+      set(t, remember) { try { (remember ? localStorage : sessionStorage).setItem(KEY, t); } catch (e) { /* private mode */ } },
+      clear() { try { localStorage.removeItem(KEY); sessionStorage.removeItem(KEY); } catch (e) { /* ignore */ } },
+    };
+    let token = store.get();
+    let comments = [];
+    let status = { state: 'available', note: '', noteAr: '' };
+    let filter = 'pending';
+
+    // text/plain keeps this a "simple" request, which Google Apps Script accepts from any site
+    const api = (body) => fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body),
+    }).then((r) => r.json());
+    const call = (action, extra) => api(Object.assign({ admin: action, token }, extra || {}))
+      .then((d) => {
+        if (d && d.ok) return d;
+        const code = (d && d.error) || 'net';
+        if (code === 'auth' || code === 'nokey') { signOut(ERR[code]); }
+        throw new Error(code);
+      }, () => { throw new Error('net'); });
+
+    let toastTimer;
+    const toast = (text, bad) => {
+      const t = $('#toast');
+      t.textContent = text;
+      t.className = 'toast show' + (bad ? ' err' : '');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { t.className = 'toast' + (bad ? ' err' : ''); }, 2600);
+    };
+    const fail = (e) => { if (e.message !== 'auth' && e.message !== 'nokey') toast(ERR[e.message] || ERR.net, true); };
+
+    /* ---------- login / logout ---------- */
+    const showLogin = (msg) => {
+      $('#app').hidden = true;
+      $('#login').hidden = false;
+      $('#login-msg').className = 'msg';
+      $('#login-msg').textContent = msg || '';
+      $('#login').elements.password.focus();
+    };
+    const signOut = (msg) => { token = ''; store.clear(); document.title = 'لوحة التحكم — NOVA'; showLogin(msg); };
+
+    $('#login').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const f = e.currentTarget;
+      const btn = $('button[type="submit"]', f);
+      const remember = f.elements.remember.checked;
+      btn.disabled = true;
+      $('#login-msg').textContent = '';
+      api({ admin: 'login', password: f.elements.password.value, remember })
+        .then((d) => {
+          if (!d || !d.ok) throw new Error((d && d.error) || 'net');
+          token = d.token;
+          store.set(token, remember);
+          f.reset();
+          f.elements.remember.checked = true;
+          showApp();
+        })
+        .catch((err) => { $('#login-msg').textContent = ERR[err.message] || ERR.net; })
+        .finally(() => { btn.disabled = false; });
+    });
+
+    $('#logout').addEventListener('click', () => {
+      const t = token;
+      signOut();
+      if (t) api({ admin: 'logout', token: t }).catch(() => {});
+    });
+
+    /* ---------- status ---------- */
+    const renderStatus = () => {
+      $$('#seg button').forEach((b) => {
+        const on = b.dataset.state === status.state;
+        b.classList.toggle('on', on);
+        b.setAttribute('aria-pressed', on);
+      });
+      const n = $('#notes');
+      $('input[name="note"]', n).value = status.note || '';
+      $('input[name="noteAr"]', n).value = status.noteAr || '';
+      if (status.note || status.noteAr) n.open = true;
+    };
+    const saveStatus = (state, btn) => {
+      const n = $('#notes');
+      const body = { state, note: $('input[name="note"]', n).value, noteAr: $('input[name="noteAr"]', n).value };
+      const btns = $$('#seg button').concat($('#save-notes'));
+      btns.forEach((b) => { b.disabled = true; });
+      return call('status', body)
+        .then((d) => {
+          status = d.status;
+          renderStatus();
+          toast(btn && btn.id === 'save-notes' ? 'تم حفظ الملاحظة ✓' : (state === 'busy' ? 'حالتك الآن: مشغول ✓' : 'حالتك الآن: متاح للعمل ✓'));
+        })
+        .catch(fail)
+        .finally(() => { btns.forEach((b) => { b.disabled = false; }); });
+    };
+    $('#seg').addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b || b.dataset.state === status.state) return;
+      saveStatus(b.dataset.state, b);
+    });
+    $('#save-notes').addEventListener('click', (e) => saveStatus(status.state, e.currentTarget));
+
+    /* ---------- comments ---------- */
+    const when = (iso) => {
+      const d = new Date(iso);
+      if (!iso || Number.isNaN(d.getTime())) return '';
+      try { return new Intl.DateTimeFormat('ar-DZ', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(d); } catch (e) { return ''; }
+    };
+    const icon = (id) => {
+      const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      const u = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+      u.setAttribute('href', `#${id}`);
+      s.appendChild(u);
+      return s;
+    };
+    const actBtn = (cls, ico, label, act) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = `act ${cls}`; b.dataset.act = act;
+      b.append(icon(ico), label);
+      return b;
+    };
+
+    // built with textContent only, so nothing a visitor typed can run as code
+    const renderComments = () => {
+      const pending = comments.filter((c) => !c.approved);
+      const live = comments.filter((c) => c.approved);
+      const counts = { pending: pending.length, live: live.length, all: comments.length };
+      $$('#tabs button').forEach((b) => {
+        b.classList.toggle('on', b.dataset.f === filter);
+        b.setAttribute('aria-selected', b.dataset.f === filter);
+        $('b', b).textContent = counts[b.dataset.f];
+      });
+      document.title = (pending.length ? `(${pending.length}) ` : '') + 'لوحة التحكم — NOVA';
+      const shown = filter === 'pending' ? pending : filter === 'live' ? live : comments;
+      const list = $('#list');
+      list.textContent = '';
+      if (!shown.length) {
+        const p = document.createElement('p');
+        p.className = 'empty';
+        p.textContent = filter === 'pending' ? 'لا توجد تعليقات في الانتظار ✓' : 'لا توجد تعليقات هنا.';
+        list.appendChild(p);
+        return;
+      }
+      shown.forEach((c, i) => {
+        const art = document.createElement('article');
+        art.className = 'item' + (c.approved ? '' : ' pending');
+        art.dataset.id = c.id;
+        art.style.animationDelay = `${Math.min(i, 8) * 40}ms`;
+        const who = document.createElement('div');
+        who.className = 'who';
+        const av = document.createElement('span');
+        av.className = 'avatar'; av.setAttribute('aria-hidden', 'true');
+        av.textContent = String(c.first || '?').trim().charAt(0).toUpperCase();
+        const meta = document.createElement('div');
+        const b = document.createElement('b');
+        b.dir = 'auto'; b.textContent = `${c.first || ''} ${c.last || ''}`.trim();
+        const sm = document.createElement('small');
+        sm.textContent = [SERVICES[c.service] || SERVICES.other, when(c.date)].filter(Boolean).join(' · ');
+        meta.append(b, sm);
+        const tag = document.createElement('span');
+        tag.className = c.approved ? 'tag live' : 'tag pending';
+        tag.textContent = c.approved ? 'منشور' : 'في الانتظار';
+        who.append(av, meta, tag);
+        const q = document.createElement('blockquote');
+        q.dir = 'auto'; q.textContent = c.comment;
+        const acts = document.createElement('div');
+        acts.className = 'acts';
+        acts.append(
+          c.approved ? actBtn('', 'i-hide', 'إخفاء من الموقع', 'hide') : actBtn('publish', 'i-check', 'نشر في الموقع', 'publish'),
+          actBtn('del', 'i-trash', 'حذف', 'delete'),
+        );
+        art.append(who, q, acts);
+        list.appendChild(art);
+      });
+    };
+
+    $('#tabs').addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      filter = b.dataset.f;
+      renderComments();
+    });
+
+    $('#list').addEventListener('click', (e) => {
+      const b = e.target.closest('.act');
+      if (!b) return;
+      const art = b.closest('.item');
+      const c = comments.find((x) => x.id === art.dataset.id);
+      if (!c) return;
+      const act = b.dataset.act;
+      if (act === 'delete' && !confirm(`حذف تعليق ${c.first} ${c.last} نهائياً؟`)) return;
+      $$('.act', art).forEach((x) => { x.disabled = true; });
+      const req = act === 'delete' ? call('delete', { id: c.id }) : call('approve', { id: c.id, value: act === 'publish' });
+      req.then(() => {
+        if (act === 'delete') { comments = comments.filter((x) => x !== c); toast('تم الحذف'); }
+        else { c.approved = act === 'publish'; toast(c.approved ? 'تم النشر في الموقع ✓' : 'تم الإخفاء من الموقع'); }
+        renderComments();
+      }).catch((err) => {
+        fail(err);
+        if (err.message === 'gone') load();
+        else $$('.act', art).forEach((x) => { x.disabled = false; });
+      });
+    });
+
+    /* ---------- load ---------- */
+    const load = () => {
+      const r = $('#reload');
+      r.disabled = true;
+      return call('data')
+        .then((d) => {
+          comments = Array.isArray(d.comments) ? d.comments : [];
+          status = d.status || status;
+          if (filter === 'pending' && !comments.some((c) => !c.approved) && comments.length) filter = 'all';
+          renderStatus();
+          renderComments();
+        })
+        .catch(fail)
+        .finally(() => { r.disabled = false; });
+    };
+    $('#reload').addEventListener('click', () => load().then(() => toast('تم التحديث')));
+
+    const showApp = () => {
+      $('#login').hidden = true;
+      $('#app').hidden = false;
+      $('#list').innerHTML = '<p class="loading">جارٍ التحميل…</p>';
+      filter = 'pending';
+      load();
+    };
+
+    if (token) showApp(); else showLogin();
+  })();
+  </script>
+</body>
+</html>
