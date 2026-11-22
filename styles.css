@@ -1213,3 +1213,41 @@ html[lang="ar"] .rc-title { font-weight: 900; font-size: 28px; line-height: 1.4;
 .rc-barcode { height: 40px; margin-top: 14px; border-radius: 4px; background-repeat: repeat-x; opacity: .85; }
 .rc-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
 @media (max-width: 420px) { .rc-actions .btn { flex: 1 1 100%; justify-content: space-between; } }
+
+/* =========================================================
+   VISITOR COMMENTS
+   ========================================================= */
+.comments-cta {
+  position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px;
+  margin-top: clamp(20px, 3vw, 32px); padding: 18px 20px; border-radius: 20px;
+}
+.comments-cta b { display: block; font-size: 17px; }
+.comments-cta span { color: var(--muted); font-size: 14px; }
+.user-comment { animation: cmIn .8s var(--ease) both; animation-delay: calc(var(--i, 0) * 80ms); }
+@keyframes cmIn { from { opacity: 0; transform: translateY(22px); } }
+
+.modal.comment-modal { width: min(560px, calc(100% - 28px)); }
+.cm { padding: 30px 24px 24px; }
+.cm-title {
+  margin: 0; padding-inline-end: 54px; font-family: var(--display); font-weight: 400;
+  font-size: clamp(30px, 5vw, 40px); line-height: 1.1; text-transform: uppercase;
+}
+html[lang="ar"] .cm-title { font-weight: 900; line-height: 1.4; }
+.cm-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+@media (max-width: 480px) { .cm-row { grid-template-columns: 1fr; } }
+.field select {
+  width: 100%; padding: 14px 16px; padding-inline-end: 42px; border-radius: 12px;
+  border: 1px solid var(--line-2); color: var(--text); font: inherit; font-size: 16px;
+  -webkit-appearance: none; appearance: none; cursor: pointer;
+  background: rgba(255, 255, 255, .03) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23ff4d7d' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 16px center;
+  transition: border-color .3s, background-color .3s;
+}
+[dir="rtl"] .field select { background-position: left 16px center; }
+.field select:focus { outline: none; border-color: var(--red); background-color: rgba(250, 29, 76, .05); }
+.field select option { background: #140d15; color: #fff; }
+.field.invalid select { border-color: #ff6474; }
+.cm .btn { margin-top: 22px; }
+.hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* readable popups (form + receipt) */
+.modal.comment-modal, .modal.receipt { background: linear-gradient(160deg, rgba(42, 10, 30, .95), rgba(12, 6, 11, .97)); }
