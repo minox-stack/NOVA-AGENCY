@@ -12,7 +12,7 @@
   <meta property="og:url" content="https://novadz.space/">
   <meta property="og:image" content="https://novadz.space/assets/amine.webp?v=3">
   <link rel="alternate" hreflang="en" href="https://novadz.space/">
-  <link rel="alternate" hreflang="ar" href="https://novadz.space/ar.html">
+  <link rel="alternate" hreflang="ar" href="https://novadz.space/ar">
   <link rel="alternate" hreflang="x-default" href="https://novadz.space/">
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -22,7 +22,7 @@
   <!-- only the Arabic letters used on this page ("عربي" switch + "فوز") -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&text=%D8%B9%D8%B1%D8%A8%D9%8A%D9%81%D9%88%D8%B2&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/amine.webp?v=3">
-  <link rel="stylesheet" href="styles.css?v=10">
+  <link rel="stylesheet" href="styles.css?v=12">
   <script>document.documentElement.classList.replace('no-js', 'js');</script>
 </head>
 <body>
@@ -102,7 +102,7 @@
   <header class="nav lg">
     <a href="#home" class="logo" aria-label="NOVA Agency — home"><img decoding="async" class="logo-mark" src="assets/nova-mark.webp" alt="" width="300" height="283"><img decoding="async" class="logo-word" src="assets/nova-wordmark.webp" alt="" width="440" height="48"></a>
     <a class="status-pill" href="#contact" data-status aria-live="polite"><i aria-hidden="true"></i><span class="st-long"></span><span class="st-short"></span></a>
-    <a class="lang lg" href="ar.html" hreflang="ar" lang="ar" title="النسخة العربية">عربي</a>
+    <a class="lang lg" href="/ar" hreflang="ar" lang="ar" title="النسخة العربية">عربي</a>
     <a href="#contact" class="btn-ghost nav-cta">Let's talk <svg class="ico"><use href="#i-arrow"/></svg></a>
   </header>
 
@@ -507,27 +507,45 @@
   <!-- ============ SEND RECEIPT (after "Send by email") ============ -->
   <dialog class="modal lg receipt" id="receipt-modal" aria-labelledby="rc-title" data-lenis-prevent>
     <div class="rc">
-      <div class="rc-check" aria-hidden="true"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23"/><path d="M15 27l7 7 15-16"/></svg><span class="rc-burst"></span></div>
-      <h3 class="rc-title" id="rc-title">Message sent!</h3>
-      <p class="rc-sub">Here's your receipt — keep it for your records.</p>
-      <div class="rc-ticket">
-        <div class="rc-row"><span>Receipt no.</span><b id="rc-no" dir="ltr"></b></div>
-        <div class="rc-row"><span>Date</span><b id="rc-date"></b></div>
-        <div class="rc-row"><span>Name</span><b id="rc-name"></b></div>
-        <div class="rc-row"><span>Email</span><b id="rc-email" dir="ltr"></b></div>
-        <div class="rc-msg"><span>Message</span><p id="rc-message"></p></div>
-        <div class="rc-row"><span>Status</span><b class="rc-ok">✓ Sent to NOVA Agency</b></div>
-        <div class="rc-barcode" aria-hidden="true"></div>
-      </div>
+      <p class="rc-kicker"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Message sent</p>
+      <h3 class="rc-title" id="rc-title">Your NOVA card</h3>
+      <p class="rc-sub">Your message reached NOVA Agency — here is your personal client card.</p>
+        <div class="nc-stage" id="nc-stage">
+          <span class="rc-burst" aria-hidden="true"></span>
+          <div class="nc-float">
+            <div class="nova-card" id="nova-card" dir="ltr">
+              <span class="nc-blob nc-b1" aria-hidden="true"></span><span class="nc-blob nc-b2" aria-hidden="true"></span><span class="nc-blob nc-b3" aria-hidden="true"></span>
+              <span class="nc-glass" aria-hidden="true"></span><span class="nc-grain" aria-hidden="true"></span><span class="nc-holo" aria-hidden="true"></span><span class="nc-sheen" aria-hidden="true"></span><span class="nc-sweep" aria-hidden="true"></span>
+              <div class="nc-content">
+                <div class="nc-top">
+                  <span class="nc-brand"><img src="assets/nova-mark.webp" alt="" width="300" height="283"><img src="assets/nova-wordmark.webp" alt="NOVA Agency" width="440" height="48"></span>
+                  <span class="nc-tier">CLIENT<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 8.5a5 5 0 0 1 0 7M10 6a8.5 8.5 0 0 1 0 12M13.5 3.5a12 12 0 0 1 0 17"/></svg></span>
+                </div>
+                <div class="nc-mid">
+                  <span class="nc-chip" aria-hidden="true"></span>
+                  <p class="nc-msg" id="nc-msg" dir="auto"></p>
+                </div>
+                <div class="nc-code" id="nc-code"></div>
+                <div class="nc-bottom">
+                  <div class="nc-f nc-holder"><small>Card holder</small><b id="nc-name" dir="auto"></b></div>
+                  <div class="nc-f nc-mail"><small>Email</small><b id="nc-email"></b></div>
+                  <div class="nc-f nc-issued"><small>Issued</small><b id="nc-date"></b></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span class="nc-shadow" aria-hidden="true"></span>
+        </div>
+      <p class="rc-note"><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg><span>Save this card on your phone. Your client code <b class="rc-code" dir="ltr"></b> is how we recognise you — mention it whenever you contact NOVA.</span></p>
       <div class="rc-actions">
-        <button class="btn" type="button" id="rc-save">Save receipt <svg class="ico"><use href="#i-download"/></svg></button>
+        <button class="btn" type="button" id="rc-save">Save card <svg class="ico"><use href="#i-download"/></svg></button>
         <button class="btn btn-outline lg" type="button" id="rc-close">Done</button>
       </div>
     </div>
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
-  <script src="fx.js?v=10" defer></script>
-  <script src="script.js?v=10" defer></script>
+  <script src="fx.js?v=12" defer></script>
+  <script src="script.js?v=12" defer></script>
 </body>
 </html>
