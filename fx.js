@@ -58,6 +58,17 @@
     if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '_', '0'].includes(e.key)) e.preventDefault();
   });
 
+  /* ---------- Copy protection (a deterrent: no right-click menu, no view-source / dev-tools shortcuts, no image saving) ---------- */
+  document.addEventListener('contextmenu', (e) => { if (!e.target.closest('input, textarea, select')) e.preventDefault(); });
+  document.addEventListener('dragstart', (e) => { if (e.target.closest('img, a')) e.preventDefault(); });
+  addEventListener('keydown', (e) => {
+    const c = e.code;
+    const mod = e.ctrlKey || e.metaKey;
+    if (c === 'F12'
+      || (mod && (e.shiftKey || e.altKey) && ['KeyI', 'KeyJ', 'KeyC', 'KeyK'].includes(c))
+      || (mod && ['KeyU', 'KeyS', 'KeyP'].includes(c))) e.preventDefault();
+  }, true);
+
   /* ---------- Smooth scroll (Lenis) ---------- */
   if (window.Lenis) {
     try {
