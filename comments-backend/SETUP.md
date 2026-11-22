@@ -26,6 +26,13 @@
 - نحّي ✓ ولا امسح السطر → التعليق يختفي.
 - كل ما يجي تعليق جديد يوصلك إيميل فيه رابط الجدول.
 
+## الحالة المباشرة: متاح ولا مشغول
+
+- حل الجدول → تبويب **Status**.
+- في الخانة **B1** اختار من القائمة: `Available — متاح` ولا `Busy — مشغول`.
+- (اختياري) **B2** ملاحظة بالإنجليزية و**B3** بالعربية، مثلاً «نرجع يوم 5 ديسمبر» — تبان حدا الحالة في قسم التواصل. خليهم فارغين إذا ما تحتاجهمش.
+- الموقع يتبدّل وحدو في دقيقتين على الأكثر (فوق في الشريط، وفي قسم التواصل).
+
 ## ملاحظات
 
 - إذا صنعت السكريبت وحدو (https://script.new) وماشي من الجدول، حط ID تاع الجدول في `SHEET_ID` في أول `Code.gs` (الـ ID هو الجزء اللي بين `/d/` و`/edit` في رابط الجدول). هكذا راهو مركّب الآن.
@@ -35,4 +42,4 @@
 
 ---
 
-**English (short):** create a Google Sheet → Extensions → Apps Script → paste `Code.gs` → run `setup` once and allow → Deploy as **Web app** (Execute as: Me, Access: Anyone) → put the `/exec` URL in `COMMENTS_API` in `script.js`. Tick **Approved** in the sheet to publish a comment.
+**English (short):** create a Google Sheet → Extensions → Apps Script → paste `Code.gs` → run `setup` once and allow → Deploy as **Web app** (Execute as: Me, Access: Anyone) → put the `/exec` URL in `COMMENTS_API` in `script.js`. Tick **Approved** in the sheet to publish a comment. Live status: pick Available or Busy in cell **B1** of the **Status** tab (optional notes in B2 English / B3 Arabic); the site follows within 2 minutes.
