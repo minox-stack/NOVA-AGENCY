@@ -465,6 +465,139 @@
     }, 'image/png');
   }
 
+  /* ---------- Visitor comments: stored in a Google Sheet, shown after the owner approves ---------- */
+  // Paste the Google Apps Script "Web app" URL here (see comments-backend/SETUP.md). Empty = comments off.
+  const COMMENTS_API = '';
+  const SERVICE_LABELS = AR
+    ? { web: 'تطوير موقع إلكتروني', video: 'مونتاج فيديو', ads: 'إعلانات مواقع التواصل', uxui: 'تصميم UX/UI', events: 'فعاليات', other: 'أخرى' }
+    : { web: 'Website development', video: 'Video editing', ads: 'Social media ads', uxui: 'UX/UI design', events: 'Events', other: 'Other' };
+  const CM = AR ? {
+    err: 'يرجى كتابة الاسم واللقب، اختيار الخدمة، وكتابة تعليق.',
+    sending: 'جارٍ الإرسال…',
+    ok: 'شكراً! وصلني تعليقك — سيظهر هنا بعد موافقتي.',
+    fail: 'تعذّر الإرسال الآن، حاول مرة أخرى بعد قليل.',
+    off: 'التعليقات غير مفعّلة بعد.',
+  } : {
+    err: 'Please add your first and last name, choose a service and write a comment.',
+    sending: 'Sending…',
+    ok: 'Thanks! I got your comment — it will appear here after I approve it.',
+    fail: "Couldn't send right now — please try again in a moment.",
+    off: 'Comments are not switched on yet.',
+  };
+  const grid = $('.review-grid');
+  // until the Google Sheet is connected, don't show a button that can't work
+  if (!COMMENTS_API) { const cta = $('.comments-cta'); if (cta) cta.remove(); }
+  const shortDate = (iso) => {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '';
+    try { return new Intl.DateTimeFormat(AR ? 'ar-DZ' : 'en-GB', { dateStyle: 'medium' }).format(d); } catch (err) { return ''; }
+  };
+  // built with textContent only, so nothing a visitor types can run as code
+  const renderComments = (list) => {
+    $$('.user-comment', grid).forEach((el) => el.remove());
+    list.forEach((c, i) => {
+      const fig = document.createElement('figure');
+      fig.className = 'review lg user-comment';
+      fig.style.setProperty('--i', i);
+      const q = document.createElement('span');
+      q.className = 'q'; q.setAttribute('aria-hidden', 'true'); q.textContent = AR ? '”' : '“';
+      const bq = document.createElement('blockquote');
+      bq.dir = 'auto'; bq.textContent = c.comment;
+      const cap = document.createElement('figcaption');
+      const av = document.createElement('span');
+      av.className = 'avatar'; av.setAttribute('aria-hidden', 'true');
+      av.textContent = String(c.first || '?').trim().charAt(0).toUpperCase();
+      const who = document.createElement('div');
+      const b = document.createElement('b');
+      b.dir = 'auto'; b.textContent = `${c.first || ''} ${c.last || ''}`.trim();
+      const sm = document.createElement('small');
+      sm.textContent = [SERVICE_LABELS[c.service] || SERVICE_LABELS.other, shortDate(c.date)].filter(Boolean).join(' · ');
+      who.append(b, sm);
+      cap.append(av, who);
+      fig.append(q, bq, cap);
+      grid.appendChild(fig);
+    });
+  };
+  const loadComments = () => {
+    if (!COMMENTS_API || !grid) return;
+    try {
+      const o = JSON.parse(sessionStorage.getItem('novaComments') || 'null');
+      if (o && Date.now() - o.t < 120000) { renderComments(o.list); return; }
+    } catch (err) { /* no cache */ }
+    fetch(COMMENTS_API)
+      .then((r) => r.json())
+      .then((d) => {
+        if (!d || !d.ok || !Array.isArray(d.comments)) return;
+        renderComments(d.comments);
+        try { sessionStorage.setItem('novaComments', JSON.stringify({ t: Date.now(), list: d.comments })); } catch (err) { /* ignore */ }
+      })
+      .catch(() => { /* the three fixed reviews stay */ });
+  };
+  if (grid && COMMENTS_API) {
+    const cio = new IntersectionObserver((es) => {
+      if (es.some((e) => e.isIntersecting)) { cio.disconnect(); loadComments(); }
+    }, { rootMargin: '700px 0px' });
+    cio.observe(grid);
+  }
+
+  const cmModal = $('#comment-modal');
+  const cmForm = $('#comment-form');
+  if (cmModal && cmForm) {
+    const cmNote = $('.form-note', cmForm);
+    const cmBtn = $('button[type="submit"]', cmForm);
+    const openBtn = $('#open-comment');
+    if (openBtn) openBtn.addEventListener('click', () => {
+      if (window.novaLenis) window.novaLenis.stop();
+      document.body.classList.add('modal-open');
+      cmModal.showModal();
+      if (!COMMENTS_API) { cmNote.className = 'form-note err'; cmNote.textContent = CM.off; }
+    });
+    $('.modal-close', cmModal).addEventListener('click', () => cmModal.close());
+    cmModal.addEventListener('click', (e) => { if (e.target === cmModal) cmModal.close(); });
+    cmModal.addEventListener('close', () => {
+      document.body.classList.remove('modal-open');
+      if (window.novaLenis) window.novaLenis.start();
+    });
+    cmForm.addEventListener('input', (e) => { const f = e.target.closest('.field'); if (f) f.classList.remove('invalid'); });
+    cmForm.addEventListener('change', (e) => { const f = e.target.closest('.field'); if (f) f.classList.remove('invalid'); });
+    cmForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = (n) => cmForm.elements[n].value.trim();
+      const checks = { first: !!v('first'), last: !!v('last'), service: !!v('service'), comment: v('comment').length >= 3 };
+      let ok = true;
+      Object.entries(checks).forEach(([n, good]) => {
+        cmForm.elements[n].closest('.field').classList.toggle('invalid', !good);
+        if (!good) ok = false;
+      });
+      if (!ok) {
+        cmNote.className = 'form-note err';
+        cmNote.textContent = CM.err;
+        cmForm.elements[Object.keys(checks).find((k) => !checks[k])].focus();
+        return;
+      }
+      if (!COMMENTS_API) { cmNote.className = 'form-note err'; cmNote.textContent = CM.off; return; }
+      cmBtn.disabled = true;
+      cmNote.className = 'form-note';
+      cmNote.textContent = CM.sending;
+      const payload = {
+        first: v('first'), last: v('last'), service: v('service'), comment: v('comment'),
+        website: cmForm.elements.website.value, // hidden field: only bots fill it
+        lang: AR ? 'ar' : 'en',
+      };
+      // text/plain keeps this a "simple" request, which Google Apps Script accepts from any site
+      fetch(COMMENTS_API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
+        .then((r) => r.json())
+        .then((d) => {
+          if (!d || !d.ok) throw new Error('rejected');
+          cmForm.reset();
+          cmNote.className = 'form-note ok';
+          cmNote.textContent = CM.ok;
+        })
+        .catch(() => { cmNote.className = 'form-note err'; cmNote.textContent = CM.fail; })
+        .finally(() => { cmBtn.disabled = false; });
+    });
+  }
+
   /* ---------- Language switch: open the other language at the same section ---------- */
   $$('.lang').forEach((a) => a.addEventListener('click', () => {
     const mid = innerHeight / 2;
