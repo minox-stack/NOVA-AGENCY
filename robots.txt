@@ -1,0 +1,13 @@
+# NOVA AGENCY — https://novadz.space
+# Every public page may be crawled, including the CSS, JavaScript and images it needs.
+User-agent: *
+Allow: /
+
+# Source files that are not pages
+Disallow: /README.md
+Disallow: /comments-backend/
+
+# The private dashboard (/admin) is deliberately not blocked here: it carries a "noindex" tag,
+# and Google must be able to read that tag to keep it out of search. Its password protects it.
+
+Sitemap: https://novadz.space/sitemap.xml
