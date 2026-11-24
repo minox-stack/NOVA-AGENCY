@@ -32,7 +32,7 @@
   };
 
   /* ---------- WhatsApp: the number is never written on the page ---------- */
-  const WA = atob('MjEzNzk2MjYzNTkx');
+  const WA = atob('MTYwNzI1MjE1ODk=');
   const openWA = (text) => window.open(`https://wa.me/${WA}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
   $$('[data-wa]').forEach((b) => b.addEventListener('click', () => openWA(T.waHello)));
 
