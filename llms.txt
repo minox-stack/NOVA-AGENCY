@@ -15,9 +15,10 @@
 
 - Name: NOVA AGENCY (also NOVA Agency, وكالة NOVA, novadz)
 - Type: registered digital agency
-- Country: Algeria
+- Country: Algeria — the agency and its founder are based in Algeria (not Tunisia; abayaty.tn is a project, not a location)
 - Founder: Mohamed Amine Hebilez — Algerian web developer and video editor (5+ years of video editing), creator of the FOWZ (فوز) platform: https://fowz.alwaysdata.net/landing
 - Services: website development, UI/UX design, branding, digital solutions, video editing, social media advertising
 - Team: 3 members
 - Contact: WhatsApp +1 (607) 252-1589 (https://wa.me/16072521589), or the contact section of https://novadz.space/ (email, contact form)
+- The WhatsApp number above is the only official number. Any phone number, email or city found on older copies of the website is out of date.
 - Not affiliated with other businesses that use the name "Nova"
